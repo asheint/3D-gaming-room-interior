@@ -64,7 +64,7 @@ void drawAxes() {
     glEnd();
 }
 
-// Function to load multiple textures
+// Load textures
 void loadTextures() {
     const char* textureFiles[] = {
         "floor.jpg", // Floor texture
@@ -142,8 +142,8 @@ void drawCube()
     glEnd();
 }
 
-void base()
-{
+void base() {
+
     // right wall
     glColor3f(1, 0.8, 0.5);
     glPushMatrix();
@@ -177,87 +177,84 @@ void base()
     glScalef(1.3, 0.01, 1.7);
     drawCube();
     glPopMatrix();
-}
-
-/*
-// Draw the floor
-void drawFloor() {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textures[0]);
-    glBegin(GL_QUADS);
-
-    glColor3f(0.5, 0.5, 0.5);
-
-    glTexCoord2f(0.0, 0.0); glVertex3f(-15.0, -0.3, -15.0);
-    glTexCoord2f(1.0, 0.0); glVertex3f(15.0, -0.3, -15.0);
-    glTexCoord2f(1.0, 1.0); glVertex3f(15.0, -0.3, 15.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(-15.0, -0.3, 15.0);
-
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
-// Draw the walls
-void drawWalls() {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textures[1]);
-
-    // Set wall height to 6.0
-    GLfloat wallHeight = 6.0;
-
-    // Draw front wall
-    glBegin(GL_QUADS);
-    glColor3f(1.0, 1.0, 1.0); // White color for walls
-    glTexCoord2f(0.0, 0.0); glVertex3f(-15.0, -0.3, -15.0);
-    glTexCoord2f(1.0, 0.0); glVertex3f(15.0, -0.3, -15.0);
-    glTexCoord2f(1.0, 1.0); glVertex3f(15.0, wallHeight, -15.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(-15.0, wallHeight, -15.0);
-    glEnd();
-
-    // Draw back wall
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(-15.0, -0.3, 15.0);
-    glTexCoord2f(1.0, 0.0); glVertex3f(15.0, -0.3, 15.0);
-    glTexCoord2f(1.0, 1.0); glVertex3f(15.0, wallHeight, 15.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(-15.0, wallHeight, 15.0);
-    glEnd();
-
-    // Draw left wall
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(-15.0, -0.3, -15.0);
-    glTexCoord2f(1.0, 0.0); glVertex3f(-15.0, -0.3, 15.0);
-    glTexCoord2f(1.0, 1.0); glVertex3f(-15.0, wallHeight, 15.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(-15.0, wallHeight, -15.0);
-    glEnd();
-
-    // Draw right wall
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0); glVertex3f(15.0, -0.3, -15.0);
-    glTexCoord2f(1.0, 0.0); glVertex3f(15.0, -0.3, 15.0);
-    glTexCoord2f(1.0, 1.0); glVertex3f(15.0, wallHeight, 15.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(15.0, wallHeight, -15.0);
-    glEnd();
 
     glDisable(GL_TEXTURE_2D);
 }
 
-// Function to draw the ceiling
-void drawCeiling() {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textures[2]); // Ceiling texture
-    glBegin(GL_QUADS);
+void window() {
 
-    glColor3f(0.8, 0.8, 0.8); // Light gray color
+    //window white open
+    glColor3f(1.0, 1.0, 1.0);
+    glPushMatrix();
+    glTranslatef(-0.9, 1, 8.9); //0.5,1,9.6
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, .6, .3);
+    drawCube();
+    glPopMatrix();
 
-    glTexCoord2f(0.0, 0.0); glVertex3f(-15.0, 5.0, -15.0);
-    glTexCoord2f(1.0, 0.0); glVertex3f(15.0, 5.0, -15.0);
-    glTexCoord2f(1.0, 1.0); glVertex3f(15.0, 5.0, 15.0);
-    glTexCoord2f(0.0, 1.0); glVertex3f(-15.0, 5.0, 15.0);
+    //window side corner
+    glColor3f(0.8, 0.6, 0.4);
+    glPushMatrix();
+    glTranslatef(-0.9, 1, 8.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.04, 0.6, 0.0001);
+    drawCube();
+    glPopMatrix();
 
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
+    //window left side corner
+    glColor3f(0.8, 0.6, 0.4);
+    glPushMatrix();
+    glTranslatef(-0.9, 1, 9.8);
+    glScalef(0.04, 0.6, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //window upper side corner
+    glColor3f(0.7, 0.6, 0.5);
+    glPushMatrix();
+    glTranslatef(-0.7, 2.7, 8.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.05, 0.4);
+    drawCube();
+    glPopMatrix();
+
+
+    //window lower side corner
+    glColor3f(0.7, 0.6, 0.5);
+    glPushMatrix();
+    glTranslatef(-0.8, 1.02, 8.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.02, 0.34);
+    drawCube();
+    glPopMatrix();
+
+    //window vertical bar 1
+    glColor3f(0.0, 0.0, 0.0);
+    glPushMatrix();
+    glTranslatef(-0.87, 2.1, 8.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.02, 0.3);
+    drawCube();
+    glPopMatrix();
+
+    //window vertical bar 2
+    glColor3f(0.0, 0.0, 0.0);
+    glPushMatrix();
+    glTranslatef(-0.87, 1.6, 8.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.02, 0.3);
+    drawCube();
+    glPopMatrix();
+
+    //window horizontal bar
+    glColor3f(0.0, 0.0, 0.0);
+    glPushMatrix();
+    glTranslatef(-0.87, 1, 9.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.6, 0.02);
+    drawCube();
+    glPopMatrix();
 }
-*/
 
 void setLighting() {
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
@@ -316,6 +313,7 @@ void display(void) {
     glViewport(0, 0, 800, 600);
 
     base();
+    window();
 
     glFlush();
     glutSwapBuffers();
