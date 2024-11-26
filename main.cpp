@@ -2,8 +2,11 @@
 #include <math.h>
 #include <stdio.h>
 #include <SOIL2.h>
+#include <vector>
 
 constexpr float PI = 3.14159265358979323846;
+
+std::vector<GLuint> textures;
 
 int width;
 int height;
@@ -61,34 +64,63 @@ void drawAxes() {
 	glEnd();
 }
 
+// Function to load multiple textures
 void loadTextures() {
-	image = SOIL_load_image("coattexure.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	const char* textureFiles[] = {
+		"floor.jpg", // Floor texture
+	};
 
-	if (image == NULL) {
-		printf("Error : %s", SOIL_last_result());
+	textures.resize(sizeof(textureFiles) / sizeof(textureFiles[0]));
+
+	for (size_t i = 0; i < textures.size(); ++i) {
+		image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
+		if (image == NULL) {
+			printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
+			continue;
+		}
+
+		glGenTextures(1, &textures[i]);
+		glBindTexture(GL_TEXTURE_2D, textures[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		SOIL_free_image_data(image);
 	}
-
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 void init(void) {
-	glClearColor(0.0, 0.8, 0.8, 1.0);
+	glClearColor(0.8, 0.8, 0.8, 1.0);
 	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
 	loadTextures();
 }
+
+// Draw the floor
+void drawFloor() {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	glBegin(GL_QUADS);
+
+	glColor3f(0.5, 0.5, 0.5); 
+
+	glTexCoord2f(0.0, 0.0); glVertex3f(-15.0, -0.3, -15.0);
+	glTexCoord2f(1.0, 0.0); glVertex3f(15.0, -0.3, -15.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(15.0, -0.3, 15.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(-15.0, -0.3, 15.0);
+
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+
 
 void setLighting() {
 
 	// Lighting set up
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 	glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
-	//glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
 
 	// Set lighting intensity and color - light 0
 	GLfloat qaAmbientLight[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -144,6 +176,8 @@ void display(void) {
 	//draw the three axes
 	if (axesOn == 1)
 		drawAxes();
+
+	drawFloor();
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -225,16 +259,14 @@ void keyboard(unsigned char key, int x, int y) {
 	if (key == 'a')
 		axesOn = 0;
 
-
-
 	glutPostRedisplay();
 }
 
 int main(void) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(400, 400);
+	glutInitWindowSize(1080, 720);
 	glutInitWindowPosition(0, 0);
-	glutCreateWindow("3D Doll - End 202021");
+	glutCreateWindow("Gaming Room Interior");
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(keyboardSpecial);
 	glutDisplayFunc(display);
