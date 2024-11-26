@@ -2,13 +2,14 @@
 #include <math.h>
 #include <stdio.h>
 #include <SOIL2.h>
+#include <iostream>
 #include <vector>
 
 constexpr float PI = 3.14159265358979323846;
 
 std::vector<GLuint> textures;
 
-GLboolean redFlag = true, fanSwitch = false;
+GLboolean redFlag = true, fanSwitch = false, switchOne = false, switchTwo = false, switchLamp = false, amb1 = true, diff1 = true, spec1 = true, amb2 = true, diff2 = true, spec2 = true, amb3 = true, diff3 = true, spec3 = true;
 double windowHeight = 800, windowWidth = 600;
 double eyeX = 7.0, eyeY = 2.0, eyeZ = 15.0, refX = 0, refY = 0, refZ = 0;
 double theta = 180.0, y = 1.36, z = 7.97888, a = 2;
@@ -65,7 +66,7 @@ void drawAxes() {
     glEnd();
 }
 
-// Load textures
+//Load textures
 void loadTextures() {
     const char* textureFiles[] = {
         "floor.jpg", // Floor texture
@@ -73,9 +74,10 @@ void loadTextures() {
         "ceiling.jpg" // Ceiling texture
     };
 
-    textures.resize(sizeof(textureFiles) / sizeof(textureFiles[0]));
+    size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
+    textures.resize(numTextures);
 
-    for (size_t i = 0; i < textures.size(); ++i) {
+    for (size_t i = 0; i < numTextures; ++i) {
         image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
         if (image == NULL) {
             printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
@@ -88,8 +90,12 @@ void loadTextures() {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         SOIL_free_image_data(image);
+
+        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
     }
 }
+
+
 
 void init(void) {
     glClearColor(0.8, 0.8, 0.8, 1.0);
@@ -178,8 +184,6 @@ void base() {
     glScalef(1.3, 0.01, 1.7);
     drawCube();
     glPopMatrix();
-
-    glDisable(GL_TEXTURE_2D);
 }
 
 void window() {
@@ -301,81 +305,206 @@ void fan()
     glPopMatrix();
 
     glPopMatrix();
+}
 
+void lightBulb1() {
+    GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
+    GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
+    GLfloat mat_diffuse[] = { 1.000, 0.843, 0.000, 1.0 };
+    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat high_shininess[] = { 100.0 };
+    GLfloat mat_emission[] = { 1.000, 1,1, 0.0 };
+
+    glPushMatrix();
+    glTranslatef(5, 5, 8);
+    glScalef(0.2, 0.2, 0.2);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+
+    if (switchOne == true) {
+        glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+    }
+    else {
+        glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+    }
+
+    glutSolidSphere(1.0, 16, 16);
     glPopMatrix();
 }
 
-void setLighting() {
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
-    glEnable(GL_LIGHT2); // Enable the third light
+void lightBulb2() {
+    GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
+    GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
+    GLfloat mat_diffuse[] = { 1.000, 0.843, 0.000, 1.0 };
+    GLfloat high_shininess[] = { 100.0 };
+    GLfloat mat_emission[] = { 1,1,1, 1.0 };
 
-    // Set lighting intensity and color - light 0
-    GLfloat qaAmbientLight[] = { 0.2, 0.2, 0.2, 1.0 };
-    GLfloat qaDiffuseLight[] = { 0.8, 0.8, 0.8, 1.0 };
-    GLfloat qaSpecularLight[] = { 1.0, 1.0, 1.0, 1.0 };
-    glLightfv(GL_LIGHT0, GL_AMBIENT, qaAmbientLight);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, qaDiffuseLight);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, qaSpecularLight);
-    GLfloat qaLightPosition[] = { -10.0, 1.0, -5.0, 1.0 }; // Adjusted position
-    glLightfv(GL_LIGHT0, GL_POSITION, qaLightPosition);
-
-    // Set lighting intensity and color - light 1
-    glLightfv(GL_LIGHT1, GL_AMBIENT, qaAmbientLight);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, qaDiffuseLight);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, qaSpecularLight);
-    GLfloat qaLightPosition1[] = { 10.0, 1.0, 0.5, 1.0 };
-    glLightfv(GL_LIGHT1, GL_POSITION, qaLightPosition1);
-
-    // Set lighting intensity and color - light 2 (near the ceiling)
-    GLfloat qaAmbientLight2[] = { 0.2, 0.2, 0.2, 1.0 };
-    GLfloat qaDiffuseLight2[] = { 0.8, 0.8, 0.8, 1.0 };
-    GLfloat qaSpecularLight2[] = { 1.0, 1.0, 1.0, 1.0 };
-    glLightfv(GL_LIGHT2, GL_AMBIENT, qaAmbientLight2);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, qaDiffuseLight2);
-    glLightfv(GL_LIGHT2, GL_SPECULAR, qaSpecularLight2);
-    GLfloat qaLightPosition2[] = { 0.0, 5.0, 0.0, 1.0 }; // Near the ceiling
-    glLightfv(GL_LIGHT2, GL_POSITION, qaLightPosition2);
-
-    GLfloat SpecRef[] = { 0.7, 0.7, 0.7, 1.0 };
-    GLint Shine = 128;
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, SpecRef);
-    glMateriali(GL_FRONT, GL_SHININESS, Shine);
+    glPushMatrix();
+    glTranslatef(0, 5, 8);
+    glScalef(0.2, 0.2, 0.2);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+    if (switchTwo == true) {
+        glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+    }
+    else {
+        glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+    }
+    glutSolidSphere(1.0, 16, 16);
+    glPopMatrix();
 }
+
+void lightBulb3() {
+    GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
+    GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
+    GLfloat mat_diffuse[] = { 1.000, 0.843, 0.000, 1.0 };
+    GLfloat high_shininess[] = { 100.0 };
+    GLfloat mat_emission[] = { 1,1,1, 1.0 };
+
+    glPushMatrix();
+    glTranslatef(0.7, 1.5, 9.0);
+    glScalef(0.2, 0.2, 0.2);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, no_mat);
+    glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
+    if (switchLamp == true) {
+        glMaterialfv(GL_FRONT, GL_EMISSION, mat_emission);
+    }
+    else {
+        glMaterialfv(GL_FRONT, GL_EMISSION, no_mat);
+    }
+    glutSolidSphere(1.0, 16, 16);
+    glPopMatrix();
+}
+
+
+void lightOne() {
+    glPushMatrix();
+    GLfloat no_light[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
+    GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat light_position[] = { 5.0, 5.0, 8.0, 1.0 }; //5 5 10
+
+    //glEnable( GL_LIGHT0);
+
+    if (amb1 == true) { glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient); }
+    else { glLightfv(GL_LIGHT0, GL_AMBIENT, no_light); }
+
+    if (diff1 == true) { glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse); }
+    else { glLightfv(GL_LIGHT0, GL_DIFFUSE, no_light); }
+
+    if (spec1 == true) { glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular); }
+    else { glLightfv(GL_LIGHT0, GL_SPECULAR, no_light); }
+
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glPopMatrix();
+}
+
+void lightTwo() {
+    glPushMatrix();
+    GLfloat no_light[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
+    GLfloat light_diffuse[] = { 1.0, 1.0, 0.9, 1.0 };
+    GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat light_position[] = { 0.0, 5.0, 8.0, 1.0 };
+
+    //glEnable( GL_LIGHT1);
+
+    if (amb2 == true) { glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient); }
+    else { glLightfv(GL_LIGHT1, GL_AMBIENT, no_light); }
+
+    if (diff2 == true) { glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse); }
+    else { glLightfv(GL_LIGHT1, GL_DIFFUSE, no_light); }
+
+    if (spec2 == true) { glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular); }
+    else { glLightfv(GL_LIGHT1, GL_SPECULAR, no_light); }
+
+    glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+    glPopMatrix();
+}
+
+void lampLight() {
+    glPushMatrix();
+    GLfloat no_light[] = { 0.0, 0.0, 0.0, 1.0 };
+    GLfloat light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
+    GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat light_position[] = { 0.7, 1.5, 9.0, 1.0 };  //0.7, 4.5, 9.0
+
+    //glEnable( GL_LIGHT2);
+
+    if (amb3 == true) { glLightfv(GL_LIGHT2, GL_AMBIENT, light_ambient); }
+    else { glLightfv(GL_LIGHT2, GL_AMBIENT, no_light); }
+
+    if (diff3 == true) { glLightfv(GL_LIGHT2, GL_DIFFUSE, light_diffuse); }
+    else { glLightfv(GL_LIGHT2, GL_DIFFUSE, no_light); }
+
+    if (spec3 == true) { glLightfv(GL_LIGHT2, GL_SPECULAR, light_specular); }
+    else { glLightfv(GL_LIGHT2, GL_SPECULAR, no_light); }
+
+    glLightfv(GL_LIGHT2, GL_POSITION, light_position);
+    GLfloat spot_direction[] = { 0.3, -1, -0.8 };
+    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 35.0);
+    glPopMatrix();
+}
+
 
 void display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(60, 1, 1, 100);
+    gluPerspective(60, windowWidth / windowHeight, 1, 100);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(eyeX, eyeY, eyeZ, refX, refY, refZ, 0, 1, 0); //7,2,15, 0,0,0, 0,1,0
+    gluLookAt(eyeX, eyeY, eyeZ, refX, refY, refZ, 0, 1, 0);
 
-    glViewport(0, 0, 800, 600);
+    glEnable(GL_LIGHTING);
+    lightOne();
+    lightTwo();
+    lampLight();
+    //lamp();
 
     base();
     window();
     fan();
+
+    lightBulb1();
+    lightBulb2();
+    //lightBulb3();
+    glDisable(GL_LIGHTING);
 
     glFlush();
     glutSwapBuffers();
 }
 
 void reshape(GLsizei w, GLsizei h) {
+    // Prevent division by zero
+    if (h == 0) h = 1;
+
+    windowWidth = w;
+    windowHeight = h;
+
     glViewport(0, 0, w, h);
-    GLfloat aspect_ratio = h == 0 ? w / 1 : (GLfloat)w / (GLfloat)h;
+    GLfloat aspect_ratio = (GLfloat)w / (GLfloat)h;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(120.0, aspect_ratio, 1.0, 100.0);
+    gluPerspective(60.0, aspect_ratio, 1.0, 100.0);
+
+    // Switch back to modelview matrix
+    glMatrixMode(GL_MODELVIEW);
 }
 
 // Update the keyboardSpecial function to include boundary checks
@@ -417,13 +546,13 @@ void myKeyboardFunc(unsigned char key, int x, int y)
     case 'd': // move eye point right along X axis
         eyeX += 1.0;
         break;
-    case 'z':  //zoom out
+    case 'o':  //zoom out
         eyeZ += 1;
         break;
-    case 'x': //zoom in
+    case 'i': //zoom in
         eyeZ -= 1;
         break;
-    case 'o': //back to default eye point and ref point
+    case 'q': //back to default eye point and ref point
         eyeX = 7.0; eyeY = 2.0; eyeZ = 15.0;
         refX = 0.0; refY = 0.0; refZ = 0.0;
         break;
@@ -452,6 +581,65 @@ void myKeyboardFunc(unsigned char key, int x, int y)
         else {
             fanSwitch = false; break;
         }
+    case '1': //to turn on and off light one
+        if (switchOne == false)
+        {
+            switchOne = true; amb1 = true; diff1 = true; spec1 = true;
+            glEnable(GL_LIGHT0); break;
+        }
+        else if (switchOne == true)
+        {
+            switchOne = false; amb1 = false; diff1 = false; spec1 = false; glDisable(GL_LIGHT0); break;
+        }
+    case '2': //to turn on and off light two
+        if (switchTwo == false)
+        {
+            switchTwo = true; amb2 = true; diff2 = true; spec2 = true;
+            glEnable(GL_LIGHT1); break;
+        }
+        else if (switchTwo == true)
+        {
+            switchTwo = false; amb2 = false; diff2 = false; spec2 = false;
+            glDisable(GL_LIGHT1); break;
+        }
+    case '3': //to turn on and off light one
+        if (switchLamp == false)
+        {
+            switchLamp = true; amb3 = true; diff3 = true; spec3 = true;
+            glEnable(GL_LIGHT2); break;
+        }
+        else if (switchLamp == true)
+        {
+            switchLamp = false; amb3 = false; diff3 = false; spec3 = false;
+            glDisable(GL_LIGHT2); break;
+        }
+    case'4': //turn on/off ambient light 1
+        if (amb1 == false) { amb1 = true; break; }
+        else { amb1 = false; break; }
+    case'5':
+        if (diff1 == false) { diff1 = true; break; }
+        else { diff1 = false; break; }
+    case'6':
+        if (spec1 == false) { spec1 = true; break; }
+        else { spec1 = false; break; }
+    case'7': //turn on/off ambient light 2
+        if (amb2 == false) { amb2 = true; break; }
+        else { amb2 = false; break; }
+    case'8':
+        if (diff2 == false) { diff2 = true; break; }
+        else { diff2 = false; break; }
+    case'9':
+        if (spec2 == false) { spec2 = true; break; }
+        else { spec2 = false; break; }
+    case'e': //turn on/off ambient lamp light
+        if (amb3 == false) { amb3 = true; break; }
+        else { amb3 = false; break; }
+    case'r':
+        if (diff3 == false) { diff3 = true; break; }
+        else { diff3 = false; break; }
+    case't':
+        if (spec3 == false) { spec3 = true; break; }
+        else { spec3 = false; break; }
     case 27:    // Escape key
         exit(1);
     }
@@ -461,7 +649,7 @@ void myKeyboardFunc(unsigned char key, int x, int y)
 
 void animate()
 {
-    if (redFlag == true)
+    if (redFlag)
     {
         theta += 2;
         z -= 0.02; //0.016667;
@@ -487,7 +675,7 @@ void animate()
             redFlag = false;
         }
     }
-    else if (redFlag == false)
+    else
     {
         theta -= 2;
         z += 0.02;//0.016667;
@@ -515,7 +703,7 @@ void animate()
         }
     }
 
-    if (fanSwitch == true) {
+    if (fanSwitch) {
         a += 5;
         if (a > 360)
             a -= 360;
@@ -543,6 +731,7 @@ int main(int argc, char** argv)
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_NORMALIZE);
     glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
     glutKeyboardFunc(myKeyboardFunc);
     //glutSpecialFunc(myKeyboardFunc);
     glutIdleFunc(animate);
