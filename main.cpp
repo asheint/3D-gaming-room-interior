@@ -8,6 +8,7 @@ constexpr float PI = 3.14159265358979323846;
 
 std::vector<GLuint> textures;
 
+GLboolean redFlag = true, fanSwitch = false;
 double windowHeight = 800, windowWidth = 600;
 double eyeX = 7.0, eyeY = 2.0, eyeZ = 15.0, refX = 0, refY = 0, refZ = 0;
 double theta = 180.0, y = 1.36, z = 7.97888, a = 2;
@@ -256,6 +257,54 @@ void window() {
     glPopMatrix();
 }
 
+void fan()
+{
+    glPushMatrix();
+    glTranslatef(3, 4, 8);
+
+    //stand
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(0.1, 0, 0.09);
+    glScalef(0.01, 0.4, 0.01);
+    //glTranslatef(-1.5,-1.5,-1.5);
+    drawCube();
+    glPopMatrix();
+
+    //fan cube
+    glColor3f(0.5, 0.2, 0.2);
+    glPushMatrix();
+    glScalef(0.1, 0.05, 0.1);
+    glTranslatef(-1.5, -1.5, -1.5);
+    drawCube();
+    glPopMatrix();
+
+    glPushMatrix();
+    glRotatef(a, 0, 1, 0);
+
+    //blade 1 blue
+    glColor3f(0.8, 0.6, 0.4);
+    glPushMatrix();
+    //glRotatef(a, 0,1,0);
+    glScalef(0.5, 0.01, 0.1);
+    glTranslatef(-1.5, -1.5, -1.5);
+    drawCube();
+    glPopMatrix();
+
+    //blade 2 purple
+    glColor3f(0.8, 0.6, 0.4);
+    glPushMatrix();
+    //glRotatef(a, 0,1,0);
+    glScalef(0.1, 0.01, 0.5);
+    glTranslatef(-1.5, -1.5, -1.5);
+    drawCube();
+    glPopMatrix();
+
+    glPopMatrix();
+
+    glPopMatrix();
+}
+
 void setLighting() {
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     glEnable(GL_LIGHTING);
@@ -314,6 +363,7 @@ void display(void) {
 
     base();
     window();
+    fan();
 
     glFlush();
     glutSwapBuffers();
@@ -367,13 +417,13 @@ void myKeyboardFunc(unsigned char key, int x, int y)
     case 'd': // move eye point right along X axis
         eyeX += 1.0;
         break;
-    case 'o':  //zoom out
+    case 'z':  //zoom out
         eyeZ += 1;
         break;
-    case 'i': //zoom in
+    case 'x': //zoom in
         eyeZ -= 1;
         break;
-    case 'q': //back to default eye point and ref point
+    case 'o': //back to default eye point and ref point
         eyeX = 7.0; eyeY = 2.0; eyeZ = 15.0;
         refX = 0.0; refY = 0.0; refZ = 0.0;
         break;
@@ -395,18 +445,87 @@ void myKeyboardFunc(unsigned char key, int x, int y)
     case 'l': //move ref point towards screen/ along z axis
         refZ -= 1;
         break;
-    //case 'f': //turn on/off fan
-    //    if (fanSwitch == false) {
-    //        fanSwitch = true; break;
-    //    }
-    //    else {
-    //        fanSwitch = false; break;
-    //    }
+    case 'f': //turn on/off fan
+        if (fanSwitch == false) {
+            fanSwitch = true; break;
+        }
+        else {
+            fanSwitch = false; break;
+        }
     case 27:    // Escape key
         exit(1);
     }
 
     glutPostRedisplay();
+}
+
+void animate()
+{
+    if (redFlag == true)
+    {
+        theta += 2;
+        z -= 0.02; //0.016667;
+        if (theta >= 196 && theta <= 210)
+        {
+            y = 1.44;
+        }
+        else if (theta >= 180 && theta <= 194)
+        {
+            y = 1.42;
+        }
+        else if (theta >= 180 && theta <= 194)
+        {
+            y = 1.4;
+        }
+        else if (theta >= 164 && theta <= 178)
+        {
+            y = 1.42;
+        }
+
+        if (theta == 210)
+        {
+            redFlag = false;
+        }
+    }
+    else if (redFlag == false)
+    {
+        theta -= 2;
+        z += 0.02;//0.016667;
+
+        if (theta >= 196 && theta <= 210)
+        {
+            y = 1.44;
+        }
+        else if (theta >= 180 && theta <= 194)
+        {
+            y = 1.42;
+        }
+        else if (theta >= 180 && theta <= 194)
+        {
+            y = 1.4;
+        }
+        else if (theta >= 164 && theta <= 178)
+        {
+            y = 1.42;
+        }
+
+        if (theta == 150)
+        {
+            redFlag = true;
+        }
+    }
+
+    if (fanSwitch == true) {
+        a += 5;
+        if (a > 360)
+            a -= 360;
+    }
+    else {
+        a = a;
+    }
+
+    glutPostRedisplay();
+
 }
 
 
@@ -418,7 +537,7 @@ int main(int argc, char** argv)
 
     glutInitWindowPosition(100, 100);
     glutInitWindowSize(windowHeight, windowWidth);
-    glutCreateWindow("1607063 Bedroom");
+    glutCreateWindow("Gaming Room Interior");
 
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
@@ -426,7 +545,7 @@ int main(int argc, char** argv)
     glutDisplayFunc(display);
     glutKeyboardFunc(myKeyboardFunc);
     //glutSpecialFunc(myKeyboardFunc);
-    //glutIdleFunc(animate);
+    glutIdleFunc(animate);
     glutMainLoop();
 
     return 0;
