@@ -632,6 +632,7 @@ void display(void)
     room();
     fan();
     cupboard();
+    window();
     
     lightBulb1();
     lightBulb2();
