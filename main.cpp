@@ -357,6 +357,110 @@ void fan()
     glPopMatrix();
 }
 
+void cupboard()
+{
+    //Cupboard/Almari ************************************************************
+
+        //cupboard
+    glColor3f(0.5, 0.2, 0.2); //0.3,0.1,0.0
+    glPushMatrix();
+    glTranslatef(4, 0, 4.4);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 1, 0.5);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's 1st vertical stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4, 1, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 0.01, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's 2nd vertical stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4, 0.5, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 0.01, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's last stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4, 0, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 0.01, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's lst horizontal stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(5.5, 0, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 1, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's right side horizontal stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4.75, 1, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 0.67, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's left side horizontal stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4, 0, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 1, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's handle right
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(5, 1.4, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.02, 0.18, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's handle left
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4.5, 1.4, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.02, 0.18, 0.01);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's drawer's 1st handle
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4.5, 0.7, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.16, 0.02, 0.01);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's drawer's 2nd handle
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(4.5, 0.25, 5.9);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.16, 0.02, 0.01);
+    drawCube();
+    glPopMatrix();
+}
+
 void lightBulb1() {
     GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
     GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
@@ -527,6 +631,7 @@ void display(void)
     lampLight();
     room();
     fan();
+    cupboard();
     
     lightBulb1();
     lightBulb2();
