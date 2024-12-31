@@ -197,58 +197,208 @@ void room()
     // carpet
     //glColor3f(0.4, 0.1, 0.0);
     glPushMatrix();
-    //glScalef(5, 0.1, 7);
-    glTranslatef(3, -0.2, 7);
+    glTranslatef(2, -0.8, 7);
     glScalef(1.3, 0.01, 1.7);
     drawCube1(0.4, 0.1, 0.0, 0.20, 0.05, 0.0);
     glPopMatrix();
 
-    // right wall
+    // front wall
     //glColor3f(1, 0.8, 0.5);
     glPushMatrix();
     glTranslatef(-1.5, -1, .5);
-    glScalef(5, 2, 0.1);
-    //drawCube1(1, 0.8, 0.5,  0.5,0.4,0.25);
-    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.35);
+    glScalef(3.2, 2, 0.1);
+    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25);
     glPopMatrix();
 
     // left wall
     //glColor3f(1, 0.8, 0.7);
     glPushMatrix();
-    glTranslatef(-4.5, -1, 0);
-    glScalef(1, 2, 5);
-    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.35);
+    glTranslatef(-2, -1, 0);
+    glScalef(0.2, 2, 5);
+    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25);
     glPopMatrix();
 
-    // wall besides the right wall
+    // right wall
     //glColor3f(1, 0.8, 0.7);
     glPushMatrix();
     glTranslatef(8, -1, 0);
     glScalef(0.2, 2, 5);
-    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.35);
+    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25);
     glPopMatrix();
 
     //ceiling
      //glColor3f(1.0, 0.9, 0.8);
     glPushMatrix();
     glTranslatef(-2, 5.1, 0);
-    glScalef(5, 0.1, 7);
-    drawCube1(1.0, 0.9, 0.8, 0.5, 0.45, 0.4);
+    glScalef(3.54, 0.1, 6);
+    drawCube1(1, 0.9, 0.8, 0.5, 0.45, 0.4);
     glPopMatrix();
 
     // floor
     glPushMatrix();
-    glScalef(5, 0.1, 7);
-    glTranslatef(-1, -5, 0); //-1,-5,.5
-    //glScalef(5, 0.1, 7);
+    glTranslatef(-2, -1.2, 0);
+    glScalef(3.54, 0.1, 6);
     drawCube1(0.5, 0.1, 0.0, 0.25, 0.05, 0);
     glPopMatrix();
 }
 
 
+//Good for machine
+
+//glColor3f(0.545, 0.271, 0.075);
+//glPushMatrix();
+//glTranslatef(0, -0.8, 2);
+//glScalef(0.2, 0.7, 0.5);
+//drawCube();
+//glPopMatrix();
+
+void computertable()
+{
+    // left body
+    glColor3f(0.545, 0.271, 0.075);
+    glPushMatrix();
+    glTranslatef(2, -0.8, 2);
+    glScalef(0.4, 0.7, 0.5);
+    drawCube();
+    glPopMatrix();
+
+    // up body
+    glColor3f(0.545, 0.271, 0.075);
+    glPushMatrix();
+    glTranslatef(2, 1.2, 2);
+    glScalef(1, 0.05, 0.5);
+    drawCube();
+    glPopMatrix();
+
+    // right body
+    glColor3f(0.545, 0.271, 0.075);
+    glPushMatrix();
+    glTranslatef(4.9, -0.8, 2);
+    glScalef(0.02, 0.7, 0.5);
+    drawCube();
+    glPopMatrix();
+
+    ////dressing table left body left stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(5.9, 0, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.01, 0.3, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table left body right stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(6.5, 0, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.01, 0.2, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table left body bottom stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(5.9, 0, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.2, 0.01, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table right body
+    //glColor3f(0.545, 0.271, 0.075);
+    //glPushMatrix();
+    //glTranslatef(7, 0, 4.6);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.2, 0.2, 0.2);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table right body left stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(7, 0, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.01, 0.2, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table right body right stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(7.6, 0, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.01, 0.3, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table right body bottom stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(7, 0, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.2, 0.01, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table upper body
+    //glColor3f(0.545, 0.271, 0.075);
+    //glPushMatrix();
+    //glTranslatef(5.9, 0.6, 4.6);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.57, 0.1, 0.2);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table upper body bottom stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(5.9, 0.6, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.57, 0.01, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table upper body upper stripe
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(5.9, 0.9, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.57, 0.01, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table upper body handle
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(6.5, 0.75, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.16, 0.02, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table left body handle
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(6.4, 0.1, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.02, 0.13, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+    ////dressing table right body handle
+    //glColor3f(0.2, 0.1, 0.1);
+    //glPushMatrix();
+    //glTranslatef(7.1, 0.1, 5.2);
+    ////glRotatef(22, 0,0,1);
+    //glScalef(0.02, 0.13, 0.0001);
+    //drawCube();
+    //glPopMatrix();
+
+}
+
 void window()
 {
-    //Window ********************************************
     //window white open
     glPushMatrix();
     glTranslatef(-0.9, 1, 8.9); //0.5,1,9.6
@@ -317,10 +467,9 @@ void fan()
     //stand
     glColor3f(0.2, 0.1, 0.1);
     glPushMatrix();
-    glTranslatef(0.1, 0, 0.09);
+    glTranslatef(0, 0, 0.09);
     glScalef(0.01, 0.4, 0.01);
-    //glTranslatef(-1.5,-1.5,-1.5);
-    drawCube1(0.2, 0.1, 0.1, 0.2, 0.1, 0.1, 100); // Stand with shininess
+    drawCube1(0.2, 0.1, 0.1, 0.2, 0.1, 0.1, 100);
     glPopMatrix();
 
     //fan cube
@@ -328,22 +477,22 @@ void fan()
     glPushMatrix();
     glScalef(0.1, 0.05, 0.1);
     glTranslatef(-1.5, -1.5, -1.5);
-    drawCube1(0.5, 0.2, 0.2, 0.5, 0.2, 0.2, 100); // Fan cube with shininess
+    drawCube1(0.5, 0.2, 0.2, 0.5, 0.2, 0.2, 100);
     glPopMatrix();
 
     glPushMatrix();
     glRotatef(a, 0, 1, 0);
 
-    //blade 1 blue
+    //blade 1
     glColor3f(0.8, 0.6, 0.4);
     glPushMatrix();
     //glRotatef(a, 0,1,0);
     glScalef(0.5, 0.01, 0.1);
     glTranslatef(-1.5, -1.5, -1.5);
-    drawCube1(0.8, 0.6, 0.4, 0.8, 0.6, 0.4, 100); // Blade 1 with shininess
+    drawCube1(0.8, 0.6, 0.4, 0.8, 0.6, 0.4, 100); 
     glPopMatrix();
 
-    //blade 2 purple
+    //blade 2
     glColor3f(0.8, 0.6, 0.4);
     glPushMatrix();
     //glRotatef(a, 0,1,0);
@@ -357,110 +506,6 @@ void fan()
     glPopMatrix();
 }
 
-void cupboard()
-{
-    //Cupboard/Almari ************************************************************
-
-        //cupboard
-    glColor3f(0.5, 0.2, 0.2); //0.3,0.1,0.0
-    glPushMatrix();
-    glTranslatef(4, 0, 4.4);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.5, 1, 0.5);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's 1st vertical stripline
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4, 1, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.5, 0.01, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's 2nd vertical stripline
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4, 0.5, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.5, 0.01, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's last stripline
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4, 0, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.5, 0.01, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's lst horizontal stripline
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(5.5, 0, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.01, 1, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's right side horizontal stripline
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4.75, 1, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.01, 0.67, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's left side horizontal stripline
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4, 0, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.01, 1, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's handle right
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(5, 1.4, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.02, 0.18, 0.0001);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's handle left
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4.5, 1.4, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.02, 0.18, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's drawer's 1st handle
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4.5, 0.7, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.16, 0.02, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //cupboard's drawer's 2nd handle
-    glColor3f(0.2, 0.1, 0.1);
-    glPushMatrix();
-    glTranslatef(4.5, 0.25, 5.9);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.16, 0.02, 0.01);
-    drawCube();
-    glPopMatrix();
-}
-
 void lightBulb1() {
     GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
     GLfloat mat_ambient[] = { 0.7, 0.7, 0.7, 1.0 };
@@ -471,7 +516,7 @@ void lightBulb1() {
     GLfloat mat_emission[] = { 1.000, 1,1, 0.0 };
 
     glPushMatrix();
-    glTranslatef(5, 5, 8);
+    glTranslatef(6, 5, 8);
     glScalef(0.2, 0.2, 0.2);
     glMaterialfv(GL_FRONT, GL_AMBIENT, no_mat);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
@@ -631,7 +676,7 @@ void display(void)
     lampLight();
     room();
     fan();
-    cupboard();
+    computertable();
     window();
     
     lightBulb1();
@@ -738,7 +783,7 @@ void myKeyboardFunc(unsigned char key, int x, int y)
     case '1': //to turn on and off light one
         if (switchOne == false)
         {
-            switchOne = true; amb1 = true; diff1 = true; spec1 = true;
+            switchOne = true; amb1 = false; diff1 = true; spec1 = true;
             glEnable(GL_LIGHT0); break;
         }
         else if (switchOne == true)
@@ -748,7 +793,7 @@ void myKeyboardFunc(unsigned char key, int x, int y)
     case '2': //to turn on and off light two
         if (switchTwo == false)
         {
-            switchTwo = true; amb2 = true; diff2 = true; spec2 = true;
+            switchTwo = true; amb2 = false; diff2 = true; spec2 = true;
             glEnable(GL_LIGHT1); break;
         }
         else if (switchTwo == true)
