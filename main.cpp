@@ -411,6 +411,36 @@ void bedsideTable()
     glPopMatrix();
 }
 
+void lamp()
+{
+    //Lamp *****************************************
+
+        //lamp base
+    glColor3f(0, 0, 1);
+    glPushMatrix();
+    glTranslatef(.6, 0.5, 9.1);
+    glScalef(0.07, 0.02, 0.07);
+    drawCube();
+    glPopMatrix();
+
+    //lamp stand
+    glColor3f(1, 0, 0);
+    glPushMatrix();
+    glTranslatef(.7, 0.35, 9.2);
+    glScalef(0.01, 0.2, 0.01);
+    drawCube();
+    glPopMatrix();
+
+    //lamp shade
+    glColor3f(0.000, 0.000, 0.545);
+    glPushMatrix();
+    glTranslatef(.7, 0.9, 9.2);
+    glScalef(0.08, 0.09, 0.08);
+    drawCube();
+    glPopMatrix();
+
+}
+
 void wallshelf()
 {
     //Wall Shelf **********************************************
@@ -857,6 +887,7 @@ void display(void)
     bed();
     window();
     bedsideTable();
+    lamp();
 
     glPushMatrix();
     glTranslatef(-1.5,-0.8, -0.3);
