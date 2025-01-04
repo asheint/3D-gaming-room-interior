@@ -325,20 +325,6 @@ void computertable()
     glPopMatrix();
 }
 
-void honeyCombCell()
-{
-    glPushMatrix();
-    glTranslatef(0, 0, 0);
-    glRotatef(90, 0, 1, 0);
-    glRotatef(-50, 1, 0, 0);
-
-    GLUquadric* quad = gluNewQuadric();
-    gluQuadricTexture(quad, GL_TRUE);
-    gluCylinder(quad, .15, .15, .48, 30, 6);
-
-    glPopMatrix();
-}
-
 void bed()
 {
     //bed headboard
