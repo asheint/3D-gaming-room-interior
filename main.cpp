@@ -8,6 +8,7 @@
 constexpr float PI = 3.14159265358979323846;
 
 std::vector<GLuint> textures;
+GLuint textureArrayID;
 
 GLboolean redFlag = true, fanSwitch = false, switchOne = false, switchTwo = false, switchLamp = false, amb1 = true, diff1 = true, spec1 = true, amb2 = true, diff2 = true, spec2 = true, amb3 = true, diff3 = true, spec3 = true;
 double windowHeight = 800, windowWidth = 600;
@@ -17,7 +18,6 @@ double theta = 180.0, y = 1.36, z = 7.97888, a = 2;
 int width;
 int height;
 unsigned char* image;
-GLuint tex; //texture ID
 
 //variables to move the camera
 GLfloat camX = 0.0; GLfloat camY = 2.0; GLfloat camZ = 10.0; // Adjusted camera height and distance
@@ -70,34 +70,80 @@ void drawAxes() {
     glEnd();
 }
 
-//Load textures
 void loadTextures() {
     const char* textureFiles[] = {
         "floor.jpg", // Floor texture
-        "wall.jpg", // Wall texture    
+        "wall.jpg",  // Wall texture    
         "ceiling.jpg" // Ceiling texture
     };
 
     size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
-    textures.resize(numTextures);
+    int width, height, channels;
 
+    // Generate a texture ID for the texture array
+    glGenTextures(1, &textureArrayID);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, textureArrayID);
+
+    // Load the first texture to get the width and height
+    unsigned char* image = SOIL_load_image(textureFiles[0], &width, &height, &channels, SOIL_LOAD_RGB);
+    if (image == NULL) {
+        std::cerr << "Error loading texture " << textureFiles[0] << ": " << SOIL_last_result() << std::endl;
+        return;
+    }
+    SOIL_free_image_data(image);
+
+    // Allocate storage for the texture array
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGB, width, height, numTextures, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+    // Load each texture into the texture array
     for (size_t i = 0; i < numTextures; ++i) {
-        image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
+        image = SOIL_load_image(textureFiles[i], &width, &height, &channels, SOIL_LOAD_RGB);
         if (image == NULL) {
-            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
+            std::cerr << "Error loading texture " << textureFiles[i] << ": " << SOIL_last_result() << std::endl;
             continue;
         }
 
-        glGenTextures(1, &textures[i]);
-        glBindTexture(GL_TEXTURE_2D, textures[i]);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // Specify the texture for the current layer
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, 1, GL_RGB, GL_UNSIGNED_BYTE, image);
         SOIL_free_image_data(image);
-
-        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
     }
+
+    // Set texture parameters
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    std::cout << "Loaded texture array with ID " << textureArrayID << std::endl;
 }
+
+//void loadTextures() {
+//    const char* textureFiles[] = {
+//        "floor.jpg", // Floor texture
+//        "wall.jpg", // Wall texture    
+//        "ceiling.jpg" // Ceiling texture
+//    };
+//
+//    size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
+//    textures.resize(numTextures);
+//
+//    for (size_t i = 0; i < numTextures; ++i) {
+//        image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
+//        if (image == NULL) {
+//            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
+//            continue;
+//        }
+//
+//        glGenTextures(1, &textures[i]);
+//        glBindTexture(GL_TEXTURE_2D, textures[i]);
+//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//        SOIL_free_image_data(image);
+//
+//        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
+//    }
+//}
 
 
 
@@ -450,12 +496,10 @@ void bedsideTable()
 
 void lamp()
 {
-    //Lamp *****************************************
-
-        //lamp base
+    //lamp base
     glColor3f(0, 0, 1);
     glPushMatrix();
-    glTranslatef(.6, 0.5, 9.1);
+    glTranslatef(-0.9, -0.3, 8.7);
     glScalef(0.07, 0.02, 0.07);
     drawCube();
     glPopMatrix();
@@ -463,7 +507,7 @@ void lamp()
     //lamp stand
     glColor3f(1, 0, 0);
     glPushMatrix();
-    glTranslatef(.7, 0.35, 9.2);
+    glTranslatef(-0.8, -0.3, 8.8);
     glScalef(0.01, 0.2, 0.01);
     drawCube();
     glPopMatrix();
@@ -471,9 +515,16 @@ void lamp()
     //lamp shade
     glColor3f(0.000, 0.000, 0.545);
     glPushMatrix();
-    glTranslatef(.7, 0.9, 9.2);
+    glTranslatef(-0.8, 0.2, 8.8);
     glScalef(0.08, 0.09, 0.08);
-    drawCube();
+	GLUquadric* quad = gluNewQuadric();
+	gluQuadricTexture(quad, GL_TRUE);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	gluCylinder(quad, 0.1, 0.0, 0.2, 20, 20);
+	glDisable(GL_TEXTURE_2D);
+
+    glPopMatrix();
     glPopMatrix();
 
 }
@@ -631,8 +682,6 @@ void wallshelf()
     glScalef(0.15, 0.1, 0.2);
     drawpyramid();
     glPopMatrix();
-
-
 
     // floor
     glColor3f(0.5, 0.1, 0.0);
