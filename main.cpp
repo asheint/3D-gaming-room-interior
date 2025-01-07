@@ -33,6 +33,10 @@ GLfloat objRY = 0.0;
 int gridOn = 0;
 int axesOn = 0;
 
+float chairX = 0.0f; // Initial X position of the chair
+float chairY = 0.0f; // Initial Y position of the chair (height, typically constant)
+float chairZ = 0.0f; // Initial Z position of the chair
+
 void drawGrid() {
     GLfloat step = 1.0f;
     GLint line;
@@ -322,6 +326,39 @@ void computertable()
     glTranslatef(4.9, -0.8, 2);
     glScalef(0.02, 0.7, 0.5);
     drawCube();
+    glPopMatrix();
+}
+
+void drawChair() {
+    glPushMatrix();
+    glTranslatef(chairX, chairY, chairZ); // Apply chair's position
+
+    // Base of the chair
+    glColor3f(0.2, 0.2, 0.2); // Dark grey
+    glPushMatrix();
+    glScalef(0.5, 0.05, 0.5); // Scale for the chair seat
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Backrest
+    glColor3f(0.3, 0.3, 0.3); // Light grey
+    glPushMatrix();
+    glTranslatef(0.0, 0.3, -0.25); // Position backrest
+    glScalef(0.5, 0.6, 0.05); // Scale for backrest
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Legs
+    glColor3f(0.1, 0.1, 0.1); // Black
+    for (float x = -0.2; x <= 0.2; x += 0.4) {
+        for (float z = -0.2; z <= 0.2; z += 0.4) {
+            glPushMatrix();
+            glTranslatef(x, -0.25, z); // Position each leg
+            glScalef(0.05, 0.5, 0.05); // Scale for legs
+            glutSolidCube(1.0);
+            glPopMatrix();
+        }
+    }
     glPopMatrix();
 }
 
@@ -888,14 +925,12 @@ void display(void)
     window();
     bedsideTable();
     lamp();
+    drawChair();
 
-    glPushMatrix();
-    glTranslatef(-1.5,-0.8, -0.3);
-    glPopMatrix();
     
     lightBulb1();
     lightBulb2();
-    //lightBulb3();
+    lightBulb3();
     glDisable(GL_LIGHTING);
 
     glFlush();
@@ -920,19 +955,26 @@ void reshape(GLsizei w, GLsizei h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-// Update the keyboardSpecial function to include boundary checks
 void keyboardSpecial(int key, int x, int y) {
+    // Move the camera
     if (key == GLUT_KEY_UP)
-        camZ -= 1; // Move forward
-
+        camZ -= 1; // Move camera forward
     if (key == GLUT_KEY_DOWN)
-        camZ += 1; // Move backward
-
-    if (key == GLUT_KEY_RIGHT)
-        camX += 1; // Move right
-
+        camZ += 1; // Move camera backward
     if (key == GLUT_KEY_LEFT)
-        camX -= 1; // Move left
+        camX -= 1; // Move camera left
+    if (key == GLUT_KEY_RIGHT)
+        camX += 1; // Move camera right
+
+    // Move the chair
+    if (key == GLUT_KEY_F1) // Up arrow for chair
+        chairZ -= 0.2f; // Move chair forward
+    if (key == GLUT_KEY_F2) // Down arrow for chair
+        chairZ += 0.2f; // Move chair backward
+    if (key == GLUT_KEY_F3) // Left arrow for chair
+        chairX -= 0.2f; // Move chair left
+    if (key == GLUT_KEY_F4) // Right arrow for chair
+        chairX += 0.2f; // Move chair right
 
     // Prevent camera from moving outside the room
     camX = std::max(-14.0f, std::min(camX, 14.0f));
@@ -941,6 +983,8 @@ void keyboardSpecial(int key, int x, int y) {
 
     glutPostRedisplay();
 }
+
+
 
 
 void myKeyboardFunc(unsigned char key, int x, int y)
