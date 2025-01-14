@@ -433,9 +433,12 @@ void lamp()
     //lamp shade
     glColor3f(0.000, 0.000, 0.545);
     glPushMatrix();
-    glTranslatef(-0.90, 0.3, 8.7);
+    glTranslatef(-0.83, 0.4, 8.8);
     glScalef(0.08, 0.09, 0.08);
-    drawCube();
+	glRotatef(90, 1, 0, 0);
+	gluDisk(gluNewQuadric(), 0, 1, 20, 20);
+	gluCylinder(gluNewQuadric(), 1, 2, 3, 20, 20); 
+    //drawCube();
     glPopMatrix();
 
 }
