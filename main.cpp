@@ -8,7 +8,6 @@
 constexpr float PI = 3.14159265358979323846;
 
 std::vector<GLuint> textures;
-GLuint textureArrayID;
 
 GLboolean redFlag = true, fanSwitch = false, switchOne = false, switchTwo = false, switchLamp = false, amb1 = true, diff1 = true, spec1 = true, amb2 = true, diff2 = true, spec2 = true, amb3 = true, diff3 = true, spec3 = true;
 double windowHeight = 800, windowWidth = 600;
@@ -18,6 +17,7 @@ double theta = 180.0, y = 1.36, z = 7.97888, a = 2;
 int width;
 int height;
 unsigned char* image;
+GLuint tex; //texture ID
 
 //variables to move the camera
 GLfloat camX = 0.0; GLfloat camY = 2.0; GLfloat camZ = 10.0; // Adjusted camera height and distance
@@ -32,10 +32,6 @@ GLfloat objRY = 0.0;
 // To on/off grids and axes
 int gridOn = 0;
 int axesOn = 0;
-
-float chairX = 0.0f; // Initial X position of the chair
-float chairY = 0.0f; // Initial Y position of the chair (height, typically constant)
-float chairZ = 0.0f; // Initial Z position of the chair
 
 void drawGrid() {
     GLfloat step = 1.0f;
@@ -70,80 +66,34 @@ void drawAxes() {
     glEnd();
 }
 
+//Load textures
 void loadTextures() {
     const char* textureFiles[] = {
         "floor.jpg", // Floor texture
-        "wall.jpg",  // Wall texture    
+        "wall.jpg", // Wall texture    
         "ceiling.jpg" // Ceiling texture
     };
 
     size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
-    int width, height, channels;
+    textures.resize(numTextures);
 
-    // Generate a texture ID for the texture array
-    glGenTextures(1, &textureArrayID);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, textureArrayID);
-
-    // Load the first texture to get the width and height
-    unsigned char* image = SOIL_load_image(textureFiles[0], &width, &height, &channels, SOIL_LOAD_RGB);
-    if (image == NULL) {
-        std::cerr << "Error loading texture " << textureFiles[0] << ": " << SOIL_last_result() << std::endl;
-        return;
-    }
-    SOIL_free_image_data(image);
-
-    // Allocate storage for the texture array
-    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGB, width, height, numTextures, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-
-    // Load each texture into the texture array
     for (size_t i = 0; i < numTextures; ++i) {
-        image = SOIL_load_image(textureFiles[i], &width, &height, &channels, SOIL_LOAD_RGB);
+        image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
         if (image == NULL) {
-            std::cerr << "Error loading texture " << textureFiles[i] << ": " << SOIL_last_result() << std::endl;
+            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
             continue;
         }
 
-        // Specify the texture for the current layer
-        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, 1, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glGenTextures(1, &textures[i]);
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         SOIL_free_image_data(image);
+
+        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
     }
-
-    // Set texture parameters
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    std::cout << "Loaded texture array with ID " << textureArrayID << std::endl;
 }
-
-//void loadTextures() {
-//    const char* textureFiles[] = {
-//        "floor.jpg", // Floor texture
-//        "wall.jpg", // Wall texture    
-//        "ceiling.jpg" // Ceiling texture
-//    };
-//
-//    size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
-//    textures.resize(numTextures);
-//
-//    for (size_t i = 0; i < numTextures; ++i) {
-//        image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
-//        if (image == NULL) {
-//            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
-//            continue;
-//        }
-//
-//        glGenTextures(1, &textures[i]);
-//        glBindTexture(GL_TEXTURE_2D, textures[i]);
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//        SOIL_free_image_data(image);
-//
-//        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
-//    }
-//}
 
 
 
@@ -375,39 +325,6 @@ void computertable()
     glPopMatrix();
 }
 
-void drawChair() {
-    glPushMatrix();
-    glTranslatef(chairX, chairY, chairZ); // Apply chair's position
-
-    // Base of the chair
-    glColor3f(0.2, 0.2, 0.2); // Dark grey
-    glPushMatrix();
-    glScalef(0.5, 0.05, 0.5); // Scale for the chair seat
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    // Backrest
-    glColor3f(0.3, 0.3, 0.3); // Light grey
-    glPushMatrix();
-    glTranslatef(0.0, 0.3, -0.25); // Position backrest
-    glScalef(0.5, 0.6, 0.05); // Scale for backrest
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    // Legs
-    glColor3f(0.1, 0.1, 0.1); // Black
-    for (float x = -0.2; x <= 0.2; x += 0.4) {
-        for (float z = -0.2; z <= 0.2; z += 0.4) {
-            glPushMatrix();
-            glTranslatef(x, -0.25, z); // Position each leg
-            glScalef(0.05, 0.5, 0.05); // Scale for legs
-            glutSolidCube(1.0);
-            glPopMatrix();
-        }
-    }
-    glPopMatrix();
-}
-
 void bed()
 {
     //bed headboard
@@ -496,10 +413,11 @@ void bedsideTable()
 
 void lamp()
 {
+
     //lamp base
     glColor3f(0, 0, 1);
     glPushMatrix();
-    glTranslatef(-0.9, -0.3, 8.7);
+    glTranslatef(-0.91, -0.28, 8.7);
     glScalef(0.07, 0.02, 0.07);
     drawCube();
     glPopMatrix();
@@ -507,7 +425,7 @@ void lamp()
     //lamp stand
     glColor3f(1, 0, 0);
     glPushMatrix();
-    glTranslatef(-0.8, -0.3, 8.8);
+    glTranslatef(-0.82, -0.2, 8.8);
     glScalef(0.01, 0.2, 0.01);
     drawCube();
     glPopMatrix();
@@ -515,23 +433,15 @@ void lamp()
     //lamp shade
     glColor3f(0.000, 0.000, 0.545);
     glPushMatrix();
-    glTranslatef(-0.8, 0.2, 8.8);
+    glTranslatef(-0.90, 0.3, 8.7);
     glScalef(0.08, 0.09, 0.08);
-	GLUquadric* quad = gluNewQuadric();
-	gluQuadricTexture(quad, GL_TRUE);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	gluCylinder(quad, 0.1, 0.0, 0.2, 20, 20);
-	glDisable(GL_TEXTURE_2D);
-
-    glPopMatrix();
+    drawCube();
     glPopMatrix();
 
 }
 
 void wallshelf()
 {
-    //Wall Shelf **********************************************
 
       //wall shelf one
     glColor3f(0.2, 0.1, 0.1);
@@ -683,6 +593,8 @@ void wallshelf()
     drawpyramid();
     glPopMatrix();
 
+
+
     // floor
     glColor3f(0.5, 0.1, 0.0);
     glPushMatrix();
@@ -782,7 +694,7 @@ void fan()
     //glRotatef(a, 0,1,0);
     glScalef(0.5, 0.01, 0.1);
     glTranslatef(-1.5, -1.5, -1.5);
-    drawCube1(0.8, 0.6, 0.4, 0.8, 0.6, 0.4, 100); 
+    drawCube1(0.8, 0.6, 0.4, 0.8, 0.6, 0.4, 100);
     glPopMatrix();
 
     //blade 2
@@ -930,7 +842,7 @@ void lampLight() {
     GLfloat light_ambient[] = { 0.5, 0.5, 0.5, 1.0 };
     GLfloat light_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat light_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-    GLfloat light_position[] = { 0.7, 1.5, 9.0, 1.0 };  //0.7, 4.5, 9.0
+    GLfloat light_position[] = { -0.90, 0.3, 8.7, 1.0 };  //0.7, 4.5, 9.0
 
     //glEnable( GL_LIGHT2);
 
@@ -974,12 +886,14 @@ void display(void)
     window();
     bedsideTable();
     lamp();
-    drawChair();
 
-    
+    glPushMatrix();
+    glTranslatef(-1.5, -0.8, -0.3);
+    glPopMatrix();
+
     lightBulb1();
     lightBulb2();
-    lightBulb3();
+    //lightBulb3();
     glDisable(GL_LIGHTING);
 
     glFlush();
@@ -1004,26 +918,19 @@ void reshape(GLsizei w, GLsizei h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+// Update the keyboardSpecial function to include boundary checks
 void keyboardSpecial(int key, int x, int y) {
-    // Move the camera
     if (key == GLUT_KEY_UP)
-        camZ -= 1; // Move camera forward
-    if (key == GLUT_KEY_DOWN)
-        camZ += 1; // Move camera backward
-    if (key == GLUT_KEY_LEFT)
-        camX -= 1; // Move camera left
-    if (key == GLUT_KEY_RIGHT)
-        camX += 1; // Move camera right
+        camZ -= 1; // Move forward
 
-    // Move the chair
-    if (key == GLUT_KEY_F1) // Up arrow for chair
-        chairZ -= 0.2f; // Move chair forward
-    if (key == GLUT_KEY_F2) // Down arrow for chair
-        chairZ += 0.2f; // Move chair backward
-    if (key == GLUT_KEY_F3) // Left arrow for chair
-        chairX -= 0.2f; // Move chair left
-    if (key == GLUT_KEY_F4) // Right arrow for chair
-        chairX += 0.2f; // Move chair right
+    if (key == GLUT_KEY_DOWN)
+        camZ += 1; // Move backward
+
+    if (key == GLUT_KEY_RIGHT)
+        camX += 1; // Move right
+
+    if (key == GLUT_KEY_LEFT)
+        camX -= 1; // Move left
 
     // Prevent camera from moving outside the room
     camX = std::max(-14.0f, std::min(camX, 14.0f));
@@ -1032,8 +939,6 @@ void keyboardSpecial(int key, int x, int y) {
 
     glutPostRedisplay();
 }
-
-
 
 
 void myKeyboardFunc(unsigned char key, int x, int y)
