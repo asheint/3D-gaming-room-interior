@@ -521,6 +521,22 @@ void gamingPC() {
     glScalef(0.2, 0.01, 0.06);
     drawCube();
     glPopMatrix();
+
+    // mouse pad
+    glColor3f(0.545, 0.271, 0.075);
+    glPushMatrix();
+    glTranslatef(3.75, 0.75, 2.45);
+    glScalef(0.4, 0.01, 0.06);
+    drawCube();
+    glPopMatrix();
+
+    // keyboard
+    glColor3f(0.545, 0.271, 0.075);
+    glPushMatrix();
+    glTranslatef(3.75, 0.75, 2.45);
+    glScalef(0.4, 0.01, 0.06);
+    drawCube();
+    glPopMatrix();
 }
 
 void bed()
