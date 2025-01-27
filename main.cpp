@@ -300,29 +300,130 @@ void room()
 
 void computertable()
 {
-    // left body
-    glColor3f(0.545, 0.271, 0.075);
-    glPushMatrix();
-    glTranslatef(2, -0.8, 2);
-    glScalef(0.4, 0.7, 0.5);
-    drawCube();
-    glPopMatrix();
-
     // up body
     glColor3f(0.545, 0.271, 0.075);
     glPushMatrix();
-    glTranslatef(2, 1.2, 2);
-    glScalef(1, 0.05, 0.5);
+    glTranslatef(2.6, 0.6, 2);
+    glScalef(0.8, 0.05, 0.5);
     drawCube();
     glPopMatrix();
 
-    // right body
-    glColor3f(0.545, 0.271, 0.075);
+    // Legs
+	glColor3f(0.545, 0.271, 0.075);
+	glPushMatrix();
+    glTranslatef(2.7, -0.9, 2.1);
+	glScalef(0.04, 0.5, 0.04);
+	drawCube();
+	glPopMatrix();
+
     glPushMatrix();
-    glTranslatef(4.9, -0.8, 2);
-    glScalef(0.02, 0.7, 0.5);
+    glTranslatef(4.8, -0.9, 2.1);
+    glScalef(0.04, 0.5, 0.04);
     drawCube();
     glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(2.7, -0.9, 3.3);
+    glScalef(0.04, 0.5, 0.04);
+    drawCube();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(4.8, -0.9, 3.3);
+    glScalef(0.04, 0.5, 0.04);
+    drawCube();
+    glPopMatrix();
+
+}
+
+
+void gamingChair() 
+{
+
+    GLUquadric* quad = gluNewQuadric();
+
+    // Chair leg bar
+	glColor3f(0.0, 0.0, 0.0);
+	glPushMatrix();
+	glTranslatef(4.0, -0.1, 5.0);
+	glScalef(0.2, 0.2, 0.2);
+    glRotatef(90, 1, 0, 0);
+    gluCylinder(quad, 0.3, 0.3, 3, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(4.0, -0.7, 4.7);
+    glScalef(0.2, 0.2, 0.2);
+    gluCylinder(quad, 0.3, 0.3, 3, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(3.7, -0.7, 5.0);
+    glRotatef(90, 0, 1, 0);
+    glScalef(0.2, 0.2, 0.2);
+    gluCylinder(quad, 0.3, 0.3, 3, 100, 100);
+    glPopMatrix();
+
+    // wheels
+    glPushMatrix();
+    glTranslatef(3.7, -0.8, 5.0);
+    glRotatef(90, 0, 1, 0);
+	glScalef(0.4, 0.3, 0.3);
+	glutSolidTorus(0.1, 0.2, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(4.3, -0.8, 5.0);
+    glRotatef(90, 0, 1, 0);
+    glScalef(0.4, 0.3, 0.3);
+    glutSolidTorus(0.1, 0.2, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(4.0, -0.8, 5.3);
+    glRotatef(90, 0, 1, 0);
+    glScalef(0.4, 0.3, 0.3);
+    glutSolidTorus(0.1, 0.2, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(4.0, -0.8, 4.7);
+    glRotatef(90, 0, 1, 0);
+    glScalef(0.4, 0.3, 0.3);
+    glutSolidTorus(0.1, 0.2, 100, 100);
+    glPopMatrix();
+
+    // Seat
+	glColor3f(0.0, 0.0, 0.0);
+	glPushMatrix();
+    glTranslatef(4.0, -0.0, 5.0);
+    glRotatef(90, 1, 0, 0);
+    glScalef(1.0, 1.2, 1.0);
+    glutSolidTorus(0.1, 0.3, 100, 100);
+    glTranslatef(0.0, 0.0, 0.0);
+	gluDisk(quad, 0.0, 0.2, 100, 100);
+    glPopMatrix();
+
+	// back rest
+	glPushMatrix();
+    glTranslatef(4.0, 0.5, 5.5);
+    glScalef(0.2, 0.2, 0.2);
+    glRotatef(90, 1, 0, 0);
+	glRotatef(15, 1, 0, 0);
+    gluCylinder(quad, 0.2, 0.3, 2, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(4.0, 0.9, 5.52);
+    glScalef(1.0, 1.5, 1.0);
+    glRotatef(5, 1, 0, 0);
+    //glRotatef(90, 0, 0, 0);
+    glutSolidTorus(0.1, 0.3, 100, 100);
+    glTranslatef(0.0, 0.0, 0.0);
+    gluDisk(quad, 0.0, 0.2, 100, 100);
+    glPopMatrix();
+
+    gluDeleteQuadric(quad);
 }
 
 void bed()
@@ -889,6 +990,7 @@ void display(void)
     window();
     bedsideTable();
     lamp();
+	gamingChair();
 
     glPushMatrix();
     glTranslatef(-1.5, -0.8, -0.3);
