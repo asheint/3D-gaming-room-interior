@@ -525,16 +525,16 @@ void gamingPC() {
     // mouse pad
     glColor3f(0.545, 0.271, 0.075);
     glPushMatrix();
-    glTranslatef(3.75, 0.75, 2.45);
-    glScalef(0.4, 0.01, 0.06);
+    glTranslatef(3.00, 0.75, 2.7);
+    glScalef(0.7, 0.01, 0.2);
     drawCube();
     glPopMatrix();
 
     // keyboard
-    glColor3f(0.545, 0.271, 0.075);
+    glColor3f(0.0, 0.0, 0.0);
     glPushMatrix();
-    glTranslatef(3.75, 0.75, 2.45);
-    glScalef(0.4, 0.01, 0.06);
+    glTranslatef(3.20, 0.8, 2.8);
+    glScalef(0.3, 0.01, 0.1);
     drawCube();
     glPopMatrix();
 }
@@ -657,169 +657,102 @@ void lamp()
 
 }
 
-void wallshelf()
+void Clock()
 {
+	glPopMatrix();
+	glTranslatef(-0.3, 0.0, -3.5);
 
-      //wall shelf one
-    glColor3f(0.2, 0.1, 0.1);
+    //clock body
+    glColor3f(0.545, 0.271, 0.075);
     glPushMatrix();
-    glTranslatef(1.5, 2.7, 3);
+    glTranslatef(-0.9, 1.8, 7.87);
     //glRotatef(22, 0,0,1);
-    glScalef(0.4, 0.03, 0.2);
+    glScalef(0.08, 0.25, 0.1);
     drawCube();
     glPopMatrix();
 
-    //wall shelf two
-    glColor3f(0.2, 0.1, 0.1);
+    //clock body white
+    glColor3f(1.000, 0.894, 0.710);
     glPushMatrix();
-    glTranslatef(1, 2.3, 3);
+    glTranslatef(-0.83, 1.9, 7.9);
     //glRotatef(22, 0,0,1);
-    glScalef(0.4, 0.03, 0.2);
+    glScalef(0.06, 0.2, 0.08);
     drawCube();
     glPopMatrix();
 
-    //wall shelf three
-    glColor3f(0.2, 0.1, 0.1);
+    //clock hour handle
+    glColor3f(0, 0, 0); //0.2,0.1,0.1
     glPushMatrix();
-    glTranslatef(0.5, 1.9, 3);
+    glTranslatef(-0.65, 2.18, 8.01);
+    glRotatef(45, 1, 0, 0);
+    glScalef(0.0001, 0.01, 0.04);
+    drawCube();
+    glPopMatrix();
+
+    //clock minute handle
+    glColor3f(0, 0, 0); //0.2,0.1,0.1
+    glPushMatrix();
+    glTranslatef(-0.65, 2.18, 8.01);
+    glRotatef(90, 1, 0, 0);
+    glScalef(0.0001, 0.012, 0.08);
+    drawCube();
+    glPopMatrix();
+
+    //clock body bottom strip
+    glColor3f(0.2, 0.1, 0.1); //0.2,0.1,0.1
+    glPushMatrix();
+    glTranslatef(-0.66, 1.8, 7.89);
     //glRotatef(22, 0,0,1);
-    glScalef(0.4, 0.03, 0.2);
+    glScalef(0.001, 0.01, 0.1);
     drawCube();
     glPopMatrix();
 
-    //wall shelf four
-    glColor3f(0.2, 0.1, 0.1);
+    //clock body right strip
+    glColor3f(0.0, 0.0, 0.0); //0.2,0.1,0.1
     glPushMatrix();
-    glTranslatef(1, 1.5, 3);
+    glTranslatef(-0.66, 1.8, 7.89);
     //glRotatef(22, 0,0,1);
-    glScalef(0.4, 0.03, 0.2);
+    glScalef(0.005, 0.25, 0.01);
     drawCube();
     glPopMatrix();
 
-    //wall shelf five
-    glColor3f(0.2, 0.1, 0.1);
+    //clock body left strip
+    glColor3f(0.2, 0.1, 0.1); //0.2,0.1,0.1
     glPushMatrix();
-    glTranslatef(1.5, 1.1, 3);
+    glTranslatef(-0.65, 1.8, 8.2);
     //glRotatef(22, 0,0,1);
-    glScalef(0.4, 0.03, 0.2);
+    glScalef(0.0001, 0.25, 0.01);
     drawCube();
     glPopMatrix();
 
-    //showpiece on the bottom shelf from left 1
-    glColor3f(0.698, 0.133, 0.133);
+    //clock pendulum stick
+    glColor3f(0.2, 0.1, 0.1); //0.2,0.1,0.1
     glPushMatrix();
-    glTranslatef(1.5, 1.2, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.04, 0.06, 0.2);
+    glTranslatef(-0.7, 2, 8.1);
+    glRotatef(theta, 1, 0, 0);
+    glScalef(0.0001, 0.2, 0.03);
     drawCube();
     glPopMatrix();
 
-    //showpiece on the bottom shelf from left 2
-    glColor3f(0.729, 0.333, 0.827);
+    //clock pendulum ball
+    glColor3f(0.2, 0.1, 0.1); //0.2,0.1,0.1
     glPushMatrix();
-    glTranslatef(2, 1.2, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.04, 0.06, 0.2);
+    glTranslatef(-0.72, 1.42, z);
+    //glRotatef(x, 1,0,0);
+    glScalef(0.035, 0.035, 0.035);
     drawCube();
     glPopMatrix();
 
-    //showpiece on the bottom shelf from left 3 lower portion
-    glColor3f(0.098, 0.098, 0.439);
+    //clock top pyramid
+    glColor3f(0.5, 0.2, 0);
     glPushMatrix();
-    glTranslatef(2.5, 1.2, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.04, 0.06, 0.2);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on the bottom shelf from left 3 upper portion
-    glColor3f(.529, 0.808, 0.980);
-    glPushMatrix();
-    glTranslatef(2.51, 1.35, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.01, 0.05, 0.2);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on the top shelf  left 2
-    glColor3f(0.502, 0.502, 0.000);
-    glPushMatrix();
-    glTranslatef(2.5, 2.71, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.05, 0.16, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on the top shelf left 1
-    glColor3f(0, 0, .9);
-    glPushMatrix();
-    glTranslatef(1.8, 2.71, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.16, 0.1, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on 2nd shelf
-    glColor3f(.416, 0.353, 0.804);
-    glPushMatrix();
-    glTranslatef(1.3, 2.4, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.16, 0.08, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on 3rd shelf left 1
-    glColor3f(0.863, 0.078, 0.235);
-    glPushMatrix();
-    glTranslatef(0.4, 1.9, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.05, 0.16, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on 3rd shelf left 2
-    glColor3f(0.780, 0.082, 0.522);
-    glPushMatrix();
-    glTranslatef(0.7, 1.9, 3);
-    //glRotatef(22, 0,0,1);
-    glScalef(0.05, 0.12, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on 3rd shelf left 3
-    glColor3f(0.600, 0.196, 0.800);
-    glPushMatrix();
-    glTranslatef(1, 1.9, 3);
-    glScalef(0.05, 0.09, 0.01);
-    drawCube();
-    glPopMatrix();
-
-    //showpiece on 4th shelf
-    glColor3f(0.282, 0.239, 0.545);
-    glPushMatrix();
-    glTranslatef(1.8, 1.5, 3);
+    glTranslatef(-0.9, 2.5, 7.87);
+    //glRotatef(x, 1,0,0);
     glScalef(0.2, 0.1, 0.2);
     drawpyramid();
     glPopMatrix();
 
-    //showpiece on 4th shelf
-    glColor3f(0.251, 0.878, 0.816);
-    glPushMatrix();
-    glTranslatef(1.4, 1.5, 3);
-    glScalef(0.15, 0.1, 0.2);
-    drawpyramid();
-    glPopMatrix();
-
-
-
-    // floor
-    glColor3f(0.5, 0.1, 0.0);
-    glPushMatrix();
-    glScalef(5, 0.1, 7);
-    glTranslatef(-1, -5, 0); //-1,-5,.5
-    //glScalef(5, 0.1, 7);
-    drawCube();
-    glPopMatrix();
+	glPopMatrix();
 }
 
 void window()
@@ -879,6 +812,103 @@ void window()
     glScalef(0.0001, 0.6, 0.02);
     drawCube1(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5);
     glPopMatrix();
+}
+
+void wardrobe()
+{
+	glPushMatrix();
+	glTranslatef(-0.9, -0.8, 2);
+
+    //wardrobe
+    glColor3f(0.3, 0.1, 0);
+    glPushMatrix();
+    glTranslatef(0, 0, 4);
+    glScalef(0.12, 0.6, 0.4);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 1st drawer
+    glColor3f(0.5, 0.2, 0.2);
+    glPushMatrix();
+    glTranslatef(0.36, 1.4, 4.05);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.11, 0.38);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 2nd drawer
+    glColor3f(0.5, 0.2, 0.2);
+    glPushMatrix();
+    glTranslatef(0.36, 1, 4.05);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.11, 0.38);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 3rd drawer
+    glColor3f(0.5, 0.2, 0.2);
+    glPushMatrix();
+    glTranslatef(0.36, 0.6, 4.05);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.11, 0.38);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 4th drawer
+    glColor3f(0.5, 0.2, 0.2);
+    glPushMatrix();
+    glTranslatef(0.36, 0.2, 4.05);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.11, 0.38);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 1st drawer handle
+    glColor3f(0.3, 0.1, 0);
+    glPushMatrix();
+    glTranslatef(0.37, 1.5, 4.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.03, 0.2);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 2nd drawer handle
+    glColor3f(0.3, 0.1, 0);
+    glPushMatrix();
+    glTranslatef(0.37, 1.1, 4.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.03, 0.2);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 3rd drawer handle
+    glColor3f(0.3, 0.1, 0);
+    glPushMatrix();
+    glTranslatef(0.37, 0.7, 4.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.03, 0.2);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe's 4th drawer handle
+    glColor3f(0.3, 0.1, 0);
+    glPushMatrix();
+    glTranslatef(0.37, 0.3, 4.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.0001, 0.03, 0.2);
+    drawCube();
+    glPopMatrix();
+
+    //wardrobe left stripline
+    glColor3f(0.5, 0.2, 0.2);
+    glPushMatrix();
+    glTranslatef(0.35, 0, 5.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 0.6, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+	glPopMatrix();
 }
 
 void fan()
@@ -1105,9 +1135,11 @@ void display(void)
     lamp();
 	gamingChair();
     gamingPC();
+    Clock();
+    wardrobe();
 
     glPushMatrix();
-    glTranslatef(-1.5, -0.8, -0.3);
+    glTranslatef(-0.25, 0, -3.5);
     glPopMatrix();
 
     lightBulb1();
