@@ -292,54 +292,51 @@ void room()
 {
     // carpet
     glPushMatrix();
-    //glColor3f(0.4, 0.1, 0.0);
+    glColor3f(1.0, 1.0, 1.0); // White
     glTranslatef(-0.6, -0.8, 2.0);
     glScalef(2.7, 0.01, 3.18);
-    drawCube1(0.4, 0.1, 0.0, 0.20, 0.05, 0.0);
+    drawCube1(1.0, 1.0, 1.0, 1.0, 1.0, 1.0); // White
     glPopMatrix();
 
     // front wall
-    //glColor3f(1, 0.8, 0.5);
     glPushMatrix();
     glTranslatef(-1.5, -1, .5);
     glScalef(3.2, 2, 0.1);
-    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25);
+    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25); // Original color
     glPopMatrix();
 
     // left wall
-    //glColor3f(1, 0.8, 0.7);
     glPushMatrix();
     glTranslatef(-2, -1, 0);
     glScalef(0.2, 2, 5);
-    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25);
+    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25); // Original color
     glPopMatrix();
 
     // right wall
-    //glColor3f(1, 0.8, 0.7);
     glPushMatrix();
     glTranslatef(8, -1, 0);
     glScalef(0.2, 2, 5);
-    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25);
+    drawCube1(1, 0.8, 0.7, 0.5, 0.4, 0.25); // Original color
     glPopMatrix();
 
-    //ceiling
-    //glColor3f(1.0, 0.9, 0.8);
+    // ceiling
     glPushMatrix();
+    glColor3f(1.0, 1.0, 1.0); // White
     glTranslatef(-2, 5.1, 0);
     glScalef(3.54, 0.1, 6);
-    drawCube1(1, 0.9, 0.8, 0.5, 0.45, 0.4);
+    drawCube1(1.0, 1.0, 1.0, 1.0, 1.0, 1.0); // White
     glPopMatrix();
 
     // floor
     glPushMatrix();
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0.83, 0.83, 0.83); // Lighter gray
     glTranslatef(-2, -1.2, 0);
     glScalef(3.54, 0.1, 6);
-    drawCube1(1.0, 1.0, 1.0, 1.0, 1.0, 1.0); // Changed to white
+    drawCube1(0.83, 0.83, 0.83, 0.83, 0.83, 0.83); // Lighter gray
     glPopMatrix();
 
     // ADDING TEXTURE LAYERS FROM INSIDE *************************
-    
+
     // front wall with textures
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textureIDs[0]); // Bind the texture for the front wall
@@ -357,7 +354,6 @@ void room()
     glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
     glEnd();
     glPopMatrix();
-
 
     glDisable(GL_TEXTURE_2D);
 
@@ -451,6 +447,8 @@ void room()
 
     //***************************************************************************
 }
+
+
 
 void computertable()
 {
@@ -978,6 +976,66 @@ void window()
     glPopMatrix();
 }
 
+void windowOutside()
+{
+    //window white open
+    glPushMatrix();
+    glTranslatef(-2.3, 1, 8.9); //0.5,1,9.6
+    glScalef(0.0001, .6, .3);
+    drawCube1(1.0, 1.0, 1.0, 0.05, 0.05, 0.05);
+    glPopMatrix();
+
+    //window right side corner
+    glPushMatrix();
+    glTranslatef(-2.3, 1, 8.9);
+    glScalef(0.04, 0.6, 0.0001);
+    drawCube1(0.8, 0.6, 0.4, 0.4, 0.3, 0.2);
+    glPopMatrix();
+
+    //window left side corner
+    glPushMatrix();
+    glTranslatef(-2.3, 1, 9.8);
+    glScalef(0.04, 0.6, 0.0001);
+    drawCube1(0.8, 0.6, 0.4, 0.4, 0.3, 0.2);
+    glPopMatrix();
+
+    //window upper side corner
+    glPushMatrix();
+    glTranslatef(-2.1, 2.7, 8.9);
+    glScalef(0.0001, 0.05, 0.4);
+    drawCube1(0.7, 0.6, 0.5, 0.35, 0.3, 0.25);
+    glPopMatrix();
+
+    //window lower side corner
+    glPushMatrix();
+    glTranslatef(-2.2, 1.02, 8.9);
+    glScalef(0.0001, 0.02, 0.34);
+    drawCube1(0.7, 0.6, 0.5, 0.35, 0.3, 0.25);
+    glPopMatrix();
+
+    //window vertical bar 1
+    glPushMatrix();
+    glTranslatef(-2.27, 2.1, 8.9);
+    glScalef(0.0001, 0.02, 0.3);
+    drawCube1(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5);
+    glPopMatrix();
+
+    //window vertical bar 2
+    glPushMatrix();
+    glTranslatef(-2.27, 1.6, 8.9);
+    glScalef(0.0001, 0.02, 0.3);
+    drawCube1(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5);
+    glPopMatrix();
+
+    //window horizontal bar
+    glPushMatrix();
+    glTranslatef(-2.27, 1, 9.3);
+    glScalef(0.0001, 0.6, 0.02);
+    drawCube1(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5);
+    glPopMatrix();
+}
+
+
 void wardrobe()
 {
 	glPushMatrix();
@@ -1081,46 +1139,47 @@ void fan()
     glTranslatef(3, 4, 8);
 
     //stand
-    glColor3f(0.2, 0.1, 0.1);
+    glColor3f(0.2, 0.2, 0.2); // Dark gray
     glPushMatrix();
     glTranslatef(0, 0, 0.09);
     glScalef(0.01, 0.4, 0.01);
-    drawCube1(0.2, 0.1, 0.1, 0.2, 0.1, 0.1, 100);
+    drawCube1(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 100); // Dark gray
     glPopMatrix();
 
     //fan cube
-    glColor3f(0.5, 0.2, 0.2);
+    glColor3f(0.2, 0.2, 0.2); // Dark gray
     glPushMatrix();
     glScalef(0.1, 0.05, 0.1);
     glTranslatef(-1.5, -1.5, -1.5);
-    drawCube1(0.5, 0.2, 0.2, 0.5, 0.2, 0.2, 100);
+    drawCube1(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 100); // Dark gray
     glPopMatrix();
 
     glPushMatrix();
     glRotatef(a, 0, 1, 0);
 
     //blade 1
-    glColor3f(0.8, 0.6, 0.4);
+    glColor3f(0.2, 0.2, 0.2); // Dark gray
     glPushMatrix();
     //glRotatef(a, 0,1,0);
     glScalef(0.5, 0.01, 0.1);
     glTranslatef(-1.5, -1.5, -1.5);
-    drawCube1(0.8, 0.6, 0.4, 0.8, 0.6, 0.4, 100);
+    drawCube1(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 100); // Dark gray
     glPopMatrix();
 
     //blade 2
-    glColor3f(0.8, 0.6, 0.4);
+    glColor3f(0.2, 0.2, 0.2); // Dark gray
     glPushMatrix();
     //glRotatef(a, 0,1,0);
     glScalef(0.1, 0.01, 0.5);
     glTranslatef(-1.5, -1.5, -1.5);
-    drawCube1(0.8, 0.6, 0.4, 0.8, 0.6, 0.4, 100); // Blade 2 with shininess
+    drawCube1(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 100); // Dark gray
     glPopMatrix();
 
     glPopMatrix();
 
     glPopMatrix();
 }
+
 
 void lightBulb1() {
     GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
@@ -1295,6 +1354,7 @@ void display(void)
     computertable();
     bed();
     window();
+    windowOutside();
     bedsideTable();
     lamp();
 	gamingChair();
