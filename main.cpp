@@ -66,39 +66,89 @@ void drawAxes() {
     glEnd();
 }
 
-//Load textures
+// Number of textures
+#define NUM_TEXTURES 5
+
+// Global variables for texture IDs
+GLuint textureIDs[NUM_TEXTURES];
+
+// Paths to texture images
+const char* textureFiles[NUM_TEXTURES] = {
+    "Textures/otherWalls.jpeg",
+    "Textures/floor.jpg",
+    "Textures/carpet.jpg",
+    "Textures/wallLR.jpg",
+    "Textures/ceilingW.jpeg",
+};
+
+// Function to load textures
 void loadTextures() {
-    const char* textureFiles[] = {
-        "floor.jpg", // Floor texture
-        "wall.jpg", // Wall texture    
-        "ceiling.jpg" // Ceiling texture
-    };
+    int width, height;
+    unsigned char* image;
 
-    size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
-    textures.resize(numTextures);
+    glGenTextures(NUM_TEXTURES, textureIDs); // Generate texture IDs
 
-    for (size_t i = 0; i < numTextures; ++i) {
+    for (int i = 0; i < NUM_TEXTURES; i++) {
+        // Load image
         image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
         if (image == NULL) {
-            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
+            printf("Error loading texture %d: %s\n", i, SOIL_last_result());
             continue;
         }
 
-        glGenTextures(1, &textures[i]);
-        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        // Bind the texture
+        glBindTexture(GL_TEXTURE_2D, textureIDs[i]);
+
+        // Create the texture
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        // Set texture parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        // Free the image memory
         SOIL_free_image_data(image);
 
-        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
+        printf("Loaded texture %d from %s\n", i, textureFiles[i]);
     }
+
+    // Unbind the texture
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+//Load textures
+//void loadTextures() {
+//    const char* textureFiles[] = {
+//        "floor.jpg", // Floor texture
+//        "wall.jpg", // Wall texture    
+//        "ceiling.jpg" // Ceiling texture
+//    };
+//
+//    size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
+//    textures.resize(numTextures);
+//
+//    for (size_t i = 0; i < numTextures; ++i) {
+//        image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
+//        if (image == NULL) {
+//            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
+//            continue;
+//        }
+//
+//        glGenTextures(1, &textures[i]);
+//        glBindTexture(GL_TEXTURE_2D, textures[i]);
+//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//        SOIL_free_image_data(image);
+//
+//        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
+//    }
+//}
 
 
 
 void init(void) {
-    glClearColor(0.8, 0.8, 0.8, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
     glClearDepth(1.0);
     glEnable(GL_DEPTH_TEST);
     loadTextures();
@@ -241,10 +291,10 @@ void drawpyramid()
 void room()
 {
     // carpet
-    //glColor3f(0.4, 0.1, 0.0);
     glPushMatrix();
+    //glColor3f(0.4, 0.1, 0.0);
     glTranslatef(-0.6, -0.8, 2.0);
-    glScalef(2.7, 0.01, 3.2);
+    glScalef(2.7, 0.01, 3.18);
     drawCube1(0.4, 0.1, 0.0, 0.20, 0.05, 0.0);
     glPopMatrix();
 
@@ -282,10 +332,124 @@ void room()
 
     // floor
     glPushMatrix();
+    glColor3f(1.0, 1.0, 1.0);
     glTranslatef(-2, -1.2, 0);
     glScalef(3.54, 0.1, 6);
-    drawCube1(0.5, 0.1, 0.0, 0.25, 0.05, 0);
+    drawCube1(1.0, 1.0, 1.0, 1.0, 1.0, 1.0); // Changed to white
     glPopMatrix();
+
+    // ADDING TEXTURE LAYERS FROM INSIDE *************************
+    
+    // front wall with textures
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[0]); // Bind the texture for the front wall
+
+    // Disable lighting temporarily
+    //glDisable(GL_LIGHTING);
+
+    glPushMatrix();
+    glTranslatef(-1.5, -1, .9);
+    glScalef(9.6, 6, 0.1);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+
+
+    glDisable(GL_TEXTURE_2D);
+
+    // left wall
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // Bind the texture for the left wall
+
+    glPushMatrix();
+    glTranslatef(-1.3, -1, 0);
+    glScalef(0.1, 6, 15);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.0f, 1.0f, 1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // right wall
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // Bind the texture for the right wall
+
+    glPushMatrix();
+    glTranslatef(7.9, -1, 0);
+    glScalef(0.1, 6, 15);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.0f, 1.0f, 1.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // carpet
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // Bind the texture for the carpet
+
+    glPushMatrix();
+    glTranslatef(-0.6, -0.7, 2.0);
+    glScalef(8.1, 0.01, 9.72);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // ceiling
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[4]); // Bind the texture for the ceiling
+
+    glPushMatrix();
+    glTranslatef(-2, 5.0, 0);
+    glScalef(10.62, 0.1, 18);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // floor
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[1]); // Bind the texture for the floor
+
+    glPushMatrix();
+    glTranslatef(-2, -0.8, 0);
+    glScalef(10.62, 0.1, 18);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+    glPopMatrix();
+
+    // Re-enable lighting
+    //glEnable(GL_LIGHTING);
+
+    glDisable(GL_TEXTURE_2D);
+
+    //***************************************************************************
 }
 
 void computertable()
@@ -1452,7 +1616,7 @@ int main(int argc, char** argv)
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
-
+	init();
     glutReshapeFunc(fullScreen);
     glutDisplayFunc(display);
     glutKeyboardFunc(myKeyboardFunc);
