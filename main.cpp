@@ -69,7 +69,7 @@ void drawAxes() {
 
 
 // Number of textures
-#define NUM_TEXTURES 11
+#define NUM_TEXTURES 12
 
 // Global variables for texture IDs
 GLuint textureIDs[NUM_TEXTURES];
@@ -80,13 +80,14 @@ const char* textureFiles[NUM_TEXTURES] = {
     "Textures/carpet.jpg", // 1
     "Textures/wallLR.jpg", // 2
     "Textures/ceilingW.jpeg", // 3
-    "Textures/screen1.jpg", // 4
-    "Textures/screen2.png", // 5
-    "Textures/screen3.jpg", // 6
+    "Textures/screenmc1.jpg", // 4
+    "Textures/screenmc.jpg", // 5
+    "Textures/screenmc2.jpg", // 6
     "Textures/pc.jpg", // 7
 	"Textures/mousepad.jpg", // 8
 	"Textures/keyboard.jpg", // 9
 	"Textures/honeyCombGo.jpg", // 10
+    "Textures/screen.jpeg", // 11
 };
 
 // Function to load textures
@@ -413,9 +414,116 @@ void room()
     glDisable(GL_TEXTURE_2D);
 
     //***************************************************************************
+
+    // PC Textures ****************************************************
+
+    // mouse pad
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[11]); // Bind the texture for the mouse pad
+
+    glPushMatrix();
+    glTranslatef(3.00, 0.75, 2.7);
+    glScalef(2.1, 0.01, 0.6);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // keyboard
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[9]); // Bind the texture for the keyboard
+
+    glPushMatrix();
+    glTranslatef(3.20, 0.8, 2.8);
+    glScalef(0.9, 0.01, 0.3);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // monitor 1 screen
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[4]); // Bind the texture for the first screen
+    glPushMatrix();
+    glTranslatef(3.5, 1.0, 2.55);
+    glRotatef(2, 1, 0, 0);
+    glScalef(1.2, 0.9, 0.01);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+
+    // monitor 2 screen
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[5]); // Bind the texture for the second screen
+
+    glPushMatrix();
+    glTranslatef(2.25, 1.0, 2.6);
+    glRotatef(2, 1, 0, 0);
+    glRotatef(10, 0, 1, 0);
+    glScalef(1.2, 0.9, 0.01);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // monitor 3 screen 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[6]); // Bind the texture for the third screen
+
+    glPushMatrix();
+    glTranslatef(4.75, 1.0, 2.5);
+    glRotatef(2, 1, 0, 0);
+    glRotatef(-10, 0, 1, 0);
+    glScalef(1.2, 0.9, 0.01);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    // machine body
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[7]); // Bind the texture for the machine body
+
+    glPushMatrix();
+    glTranslatef(6.1, 0.62, 3.11);
+    glScalef(0.45, 1.2, 0.9);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+
+    glDisable(GL_TEXTURE_2D);
+
+    //***************************************************************************
 }
-
-
 
 void computertable()
 {
@@ -649,103 +757,6 @@ void gamingPC() {
     glScalef(0.2, 0.01, 0.06);
     drawCube();
     glPopMatrix();
-
-    // Textures ****************************************************
-
-    // mouse pad
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[8]); // Bind the texture for the mouse pad
-    glPushMatrix();
-    glTranslatef(3.00, 0.75, 2.7);
-    glScalef(2.1, 0.01, 0.6);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
-
-    // keyboard
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[9]); // Bind the texture for the keyboard
-    glPushMatrix();
-    glTranslatef(3.20, 0.8, 2.8);
-    glScalef(0.9, 0.01, 0.3);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
-
-    // monitor 1 screen
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[4]); // Bind the texture for the first screen
-    glPushMatrix();
-    glTranslatef(3.5, 1.0, 2.55);
-    glRotatef(2, 1, 0, 0);
-    glScalef(1.2, 0.9, 0.01);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
-
-    // monitor 2 screen
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[5]); // Bind the texture for the second screen
-    glPushMatrix();
-    glTranslatef(2.25, 1.0, 2.6);
-    glRotatef(2, 1, 0, 0);
-    glRotatef(10, 0, 1, 0);
-    glScalef(1.2, 0.9, 0.01);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
-
-    // monitor 3 screen 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[6]); // Bind the texture for the third screen
-    glPushMatrix();
-    glTranslatef(4.75, 1.0, 2.5);
-    glRotatef(2, 1, 0, 0);
-    glRotatef(-10, 0, 1, 0);
-    glScalef(1.2, 0.9, 0.01);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
-
-    // machine body
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[7]); // Bind the texture for the machine body
-    glPushMatrix();
-    glTranslatef(6.1, 0.62, 3.11);
-    glScalef(0.45, 1.2, 0.9);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
-    glEnd();
-    glPopMatrix();
-    glDisable(GL_TEXTURE_2D);
 }
 
 void bed()
@@ -1227,6 +1238,108 @@ void fan()
     glPopMatrix();
 }
 
+void cupboard()
+{
+    //Cupboard/Almari
+ 
+    glColor3f(0.5, 0.2, 0.2); //0.3,0.1,0.0
+    glPushMatrix();
+	glTranslatef(-0.2, -0.8, 4.7); 
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 1, 0.2);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's 1st vertical stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(-0.2, 0.2, 5.2);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 0.01, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's 2nd vertical stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(-0.2, -0.3, 5.2); 
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 0.01, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's last stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(-0.2, -0.8, 5.2);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.5, 0.01, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's lst horizontal stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(1.3, -0.8, 5.2); 
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 1, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's right side horizontal stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(0.55, 0.2, 5.2);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 0.67, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's left side horizontal stripline
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(-0.2, -0.8, 5.2);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.01, 1, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's handle right
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(0.8, 0.6, 5.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.02, 0.18, 0.0001);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's handle left
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(0.3, 0.6, 5.3); // -4.2 -0.8, +0.3
+    //glRotatef(22, 0,0,1);
+    glScalef(0.02, 0.18, 0.01);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's drawer's 1st handle
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(0.3, -0.1, 5.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.16, 0.02, 0.01);
+    drawCube();
+    glPopMatrix();
+
+    //cupboard's drawer's 2nd handle
+    glColor3f(0.2, 0.1, 0.1);
+    glPushMatrix();
+    glTranslatef(0.3, -0.55, 5.3);
+    //glRotatef(22, 0,0,1);
+    glScalef(0.16, 0.02, 0.01);
+    drawCube();
+    glPopMatrix();
+}
 
 void lightBulb1() {
     GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
@@ -1408,9 +1521,12 @@ void display(void)
     gamingPC();
     Clock();
     wardrobe();
+	cupboard();
 
     glPushMatrix();
-    glTranslatef(-0.25, 0, -3.5);
+    glTranslatef(-0.25, 0, 15.0);
+    //glScalef(10, 10, 10);
+
     glPopMatrix();
 
     lightBulb1();
@@ -1519,7 +1635,7 @@ void myKeyboardFunc(unsigned char key, int x, int y) {
         eyeX = 7.0; eyeY = 2.0; eyeZ = 15.0;
         refX = 0.0; refY = 0.0; refZ = 0.0;
         break;
-    case 'z': // move ref point upwards along Y axis
+    case 'h': // move ref point upwards along Y axis
         refY += 1.0;
         break;
     case 'n': // move ref point downwards along Y axis
@@ -1533,46 +1649,46 @@ void myKeyboardFunc(unsigned char key, int x, int y) {
         break;
 
     case 'f': //turn on/off fan
-        fanSwitch = !fanSwitch;
+        fanSwitch = ~fanSwitch;
         break;
     case '1': //to turn on and off light one
-        switchOne = !switchOne;
+        switchOne = ~switchOne;
         if (switchOne) glEnable(GL_LIGHT0); else glDisable(GL_LIGHT0);
         break;
     case '2': //to turn on and off light two
-        switchTwo = !switchTwo;
+        switchTwo = ~switchTwo;
         if (switchTwo) glEnable(GL_LIGHT1); else glDisable(GL_LIGHT1);
         break;
     case '3': //to turn on and off lamp
-        switchLamp = !switchLamp;
+        switchLamp = ~switchLamp;
         if (switchLamp) glEnable(GL_LIGHT2); else glDisable(GL_LIGHT2);
         break;
     case '4': //turn on/off ambient light 1
-        amb1 = !amb1;
+        amb1 = ~amb1;
         break;
     case '5':
-        diff1 = !diff1;
+        diff1 = ~diff1;
         break;
     case '6':
-        spec1 = !spec1;
+        spec1 = ~spec1;
         break;
     case '7': //turn on/off ambient light 2
-        amb2 = !amb2;
+        amb2 = ~amb2;
         break;
     case '8':
-        diff2 = !diff2;
+        diff2 = ~diff2;
         break;
     case '9':
-        spec2 = !spec2;
+        spec2 = ~spec2;
         break;
     case 'e': //turn on/off ambient lamp light
-        amb3 = !amb3;
+        amb3 = ~amb3;
         break;
     case 'r':
-        diff3 = !diff3;
+        diff3 = ~diff3;
         break;
     case 't':
-        spec3 = !spec3;
+        spec3 = ~spec3;
         break;
     case 27:    // Escape key
         exit(1);
@@ -1667,20 +1783,23 @@ int main(int argc, char** argv)
     std::cout << "s: down" << std::endl;
     std::cout << "a: left" << std::endl;
     std::cout << "d: right" << std::endl;
-    std::cout << "i: zoom in" << std::endl;
+    std::cout << "p: zoom in" << std::endl;
     std::cout << "o: zoom out" << std::endl;
     std::cout << "      " << std::endl;
     std::cout << "To move Camera point:" << std::endl;
-    std::cout << "j: up" << std::endl;
+    std::cout << "h: up" << std::endl;
     std::cout << "n: down" << std::endl;
     std::cout << "b: left" << std::endl;
     std::cout << "m: right" << std::endl;
-    std::cout << "l: move nearer" << std::endl;
-    std::cout << "k: move far" << std::endl;
     std::cout << "      " << std::endl;
     std::cout << "Press q to move to default position" << std::endl;
     std::cout << "      " << std::endl;
     std::cout << "f: to turn on/off fan     " << std::endl;
+    std::cout << "      " << std::endl;
+    std::cout << "i: move chair forward" << std::endl;
+    std::cout << "k: move chair backward" << std::endl;
+    std::cout << "j: move chair left" << std::endl;
+    std::cout << "l: move chair right" << std::endl;
     std::cout << "      " << std::endl;
     std::cout << "For lighting:      " << std::endl;
     std::cout << "Light source 1 [the light on the right on the screen      " << std::endl;
@@ -1714,7 +1833,7 @@ int main(int argc, char** argv)
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
-	init();
+    init();
     glutReshapeFunc(fullScreen);
     glutDisplayFunc(display);
     glutKeyboardFunc(myKeyboardFunc);
