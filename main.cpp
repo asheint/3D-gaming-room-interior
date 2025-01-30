@@ -13,6 +13,7 @@ GLboolean redFlag = true, fanSwitch = false, switchOne = false, switchTwo = fals
 double windowHeight = 800, windowWidth = 600;
 double eyeX = 7.0, eyeY = 2.0, eyeZ = 15.0, refX = 0, refY = 0, refZ = 0;
 double theta = 180.0, y = 1.36, z = 7.97888, a = 2;
+GLfloat chairX = 4.0, chairY = -0.1, chairZ = 5.0;
 
 int width;
 int height;
@@ -38,60 +39,67 @@ void drawGrid() {
     GLint line;
 
     glBegin(GL_LINES);
-    for (line = -20; line <= 20; line += step) {
-        glVertex3f(line, -0.4, 20);
-        glVertex3f(line, -0.4, -20);
+    for (line = -20; line <= 20; line += static_cast<GLint>(step)) {
+        glVertex3f(static_cast<GLfloat>(line), -0.4f, 20.0f);
+        glVertex3f(static_cast<GLfloat>(line), -0.4f, -20.0f);
 
-        glVertex3f(20, -0.4, line);
-        glVertex3f(-20, -0.4, line);
+        glVertex3f(20.0f, -0.4f, static_cast<GLfloat>(line));
+        glVertex3f(-20.0f, -0.4f, static_cast<GLfloat>(line));
     }
     glEnd();
 }
 
 void drawAxes() {
     glBegin(GL_LINES);
-    glLineWidth(1.5);
+    glLineWidth(1.5f);
 
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3f(-200, 0, 0);
-    glVertex3f(200, 0, 0);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glVertex3f(-200.0f, 0.0f, 0.0f);
+    glVertex3f(200.0f, 0.0f, 0.0f);
 
-    glColor3f(0.0, 1.0, 0.0);
-    glVertex3f(0, -200, 0);
-    glVertex3f(0, 200, 0);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(0.0f, -200.0f, 0.0f);
+    glVertex3f(0.0f, 200.0f, 0.0f);
 
-    glColor3f(0.0, 0.0, 1.0);
-    glVertex3f(0, 0, -200);
-    glVertex3f(0, 0, 200);
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(0.0f, 0.0f, -200.0f);
+    glVertex3f(0.0f, 0.0f, 200.0f);
     glEnd();
 }
 
+
 // Number of textures
-#define NUM_TEXTURES 5
+#define NUM_TEXTURES 11
 
 // Global variables for texture IDs
 GLuint textureIDs[NUM_TEXTURES];
 
 // Paths to texture images
 const char* textureFiles[NUM_TEXTURES] = {
-    "Textures/otherWalls.jpeg",
-    "Textures/floor.jpg",
-    "Textures/carpet.jpg",
-    "Textures/wallLR.jpg",
-    "Textures/ceilingW.jpeg",
+    "Textures/floor.jpg", // 0
+    "Textures/carpet.jpg", // 1
+    "Textures/wallLR.jpg", // 2
+    "Textures/ceilingW.jpeg", // 3
+    "Textures/screen1.jpg", // 4
+    "Textures/screen2.png", // 5
+    "Textures/screen3.jpg", // 6
+    "Textures/pc.jpg", // 7
+	"Textures/mousepad.jpg", // 8
+	"Textures/keyboard.jpg", // 9
+	"Textures/honeyCombGo.jpg", // 10
 };
 
 // Function to load textures
 void loadTextures() {
     int width, height;
-    unsigned char* image;
+    unsigned char* image = nullptr;
 
     glGenTextures(NUM_TEXTURES, textureIDs); // Generate texture IDs
 
     for (int i = 0; i < NUM_TEXTURES; i++) {
         // Load image
         image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
-        if (image == NULL) {
+        if (image == nullptr) {
             printf("Error loading texture %d: %s\n", i, SOIL_last_result());
             continue;
         }
@@ -115,37 +123,6 @@ void loadTextures() {
     // Unbind the texture
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
-//Load textures
-//void loadTextures() {
-//    const char* textureFiles[] = {
-//        "floor.jpg", // Floor texture
-//        "wall.jpg", // Wall texture    
-//        "ceiling.jpg" // Ceiling texture
-//    };
-//
-//    size_t numTextures = sizeof(textureFiles) / sizeof(textureFiles[0]);
-//    textures.resize(numTextures);
-//
-//    for (size_t i = 0; i < numTextures; ++i) {
-//        image = SOIL_load_image(textureFiles[i], &width, &height, 0, SOIL_LOAD_RGB);
-//        if (image == NULL) {
-//            printf("Error loading texture %s: %s\n", textureFiles[i], SOIL_last_result());
-//            continue;
-//        }
-//
-//        glGenTextures(1, &textures[i]);
-//        glBindTexture(GL_TEXTURE_2D, textures[i]);
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//        SOIL_free_image_data(image);
-//
-//        printf("Loaded texture %s with ID %u\n", textureFiles[i], textures[i]);
-//    }
-//}
-
-
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -177,31 +154,26 @@ static GLubyte quadIndices[6][4] =
 };
 
 
-static void getNormal3p
-(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat x3, GLfloat y3, GLfloat z3)
-{
-    GLfloat Ux, Uy, Uz, Vx, Vy, Vz, Nx, Ny, Nz;
+static void getNormal3p(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, GLfloat x3, GLfloat y3, GLfloat z3) {
+    GLfloat Ux = x2 - x1;
+    GLfloat Uy = y2 - y1;
+    GLfloat Uz = z2 - z1;
 
-    Ux = x2 - x1;
-    Uy = y2 - y1;
-    Uz = z2 - z1;
+    GLfloat Vx = x3 - x1;
+    GLfloat Vy = y3 - y1;
+    GLfloat Vz = z3 - z1;
 
-    Vx = x3 - x1;
-    Vy = y3 - y1;
-    Vz = z3 - z1;
-
-    Nx = Uy * Vz - Uz * Vy;
-    Ny = Uz * Vx - Ux * Vz;
-    Nz = Ux * Vy - Uy * Vx;
+    GLfloat Nx = Uy * Vz - Uz * Vy;
+    GLfloat Ny = Uz * Vx - Ux * Vz;
+    GLfloat Nz = Ux * Vy - Uy * Vx;
 
     glNormal3f(Nx, Ny, Nz);
 }
 
-void drawCube()
-{
+
+void drawCube() {
     glBegin(GL_QUADS);
-    for (GLint i = 0; i < 6; i++)
-    {
+    for (GLint i = 0; i < 6; i++) {
         getNormal3p(v_cube[quadIndices[i][0]][0], v_cube[quadIndices[i][0]][1], v_cube[quadIndices[i][0]][2],
             v_cube[quadIndices[i][1]][0], v_cube[quadIndices[i][1]][1], v_cube[quadIndices[i][1]][2],
             v_cube[quadIndices[i][2]][0], v_cube[quadIndices[i][2]][1], v_cube[quadIndices[i][2]][2]);
@@ -213,12 +185,12 @@ void drawCube()
     glEnd();
 }
 
-void drawCube1(GLfloat difX, GLfloat difY, GLfloat difZ, GLfloat ambX = 0, GLfloat ambY = 0, GLfloat ambZ = 0, GLfloat shine = 50)
-{
-    GLfloat no_mat[] = { 0.0, 0.0, 0.0, 1.0 };
-    GLfloat mat_ambient[] = { ambX, ambY, ambZ, 1.0 };
-    GLfloat mat_diffuse[] = { difX, difY, difZ, 1.0 };
-    GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+
+void drawCube1(GLfloat difX, GLfloat difY, GLfloat difZ, GLfloat ambX = 0, GLfloat ambY = 0, GLfloat ambZ = 0, GLfloat shine = 50) {
+    GLfloat no_mat[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    GLfloat mat_ambient[] = { ambX, ambY, ambZ, 1.0f };
+    GLfloat mat_diffuse[] = { difX, difY, difZ, 1.0f };
+    GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
     GLfloat mat_shininess[] = { shine };
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
@@ -229,8 +201,7 @@ void drawCube1(GLfloat difX, GLfloat difY, GLfloat difZ, GLfloat ambX = 0, GLflo
 
     glBegin(GL_QUADS);
 
-    for (GLint i = 0; i < 6; i++)
-    {
+    for (GLint i = 0; i < 6; i++) {
         getNormal3p(v_cube[quadIndices[i][0]][0], v_cube[quadIndices[i][0]][1], v_cube[quadIndices[i][0]][2],
             v_cube[quadIndices[i][1]][0], v_cube[quadIndices[i][1]][1], v_cube[quadIndices[i][1]][2],
             v_cube[quadIndices[i][2]][0], v_cube[quadIndices[i][2]][1], v_cube[quadIndices[i][2]][2]);
@@ -264,11 +235,9 @@ static GLubyte PquadIndices[1][4] =
     {0, 3, 2, 1}
 };
 
-void drawpyramid()
-{
+void drawpyramid() {
     glBegin(GL_TRIANGLES);
-    for (GLint i = 0; i < 4; i++)
-    {
+    for (GLint i = 0; i < 4; i++) {
         glVertex3fv(&v_pyramid[p_Indices[i][0]][0]);
         glVertex3fv(&v_pyramid[p_Indices[i][1]][0]);
         glVertex3fv(&v_pyramid[p_Indices[i][2]][0]);
@@ -276,15 +245,13 @@ void drawpyramid()
     glEnd();
 
     glBegin(GL_QUADS);
-    for (GLint i = 0; i < 1; i++)
-    {
+    for (GLint i = 0; i < 1; i++) {
         glVertex3fv(&v_pyramid[PquadIndices[i][0]][0]);
         glVertex3fv(&v_pyramid[PquadIndices[i][1]][0]);
         glVertex3fv(&v_pyramid[PquadIndices[i][2]][0]);
         glVertex3fv(&v_pyramid[PquadIndices[i][3]][0]);
     }
     glEnd();
-
 }
 
 
@@ -339,7 +306,7 @@ void room()
 
     // front wall with textures
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[0]); // Bind the texture for the front wall
+    glBindTexture(GL_TEXTURE_2D, textureIDs[10]); // Bind the texture for the front wall
 
     // Disable lighting temporarily
     //glDisable(GL_LIGHTING);
@@ -359,7 +326,7 @@ void room()
 
     // left wall
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // Bind the texture for the left wall
+    glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // Bind the texture for the left wall
 
     glPushMatrix();
     glTranslatef(-1.3, -1, 0);
@@ -376,7 +343,7 @@ void room()
 
     // right wall
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // Bind the texture for the right wall
+    glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // Bind the texture for the right wall
 
     glPushMatrix();
     glTranslatef(7.9, -1, 0);
@@ -393,7 +360,7 @@ void room()
 
     // carpet
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[2]); // Bind the texture for the carpet
+    glBindTexture(GL_TEXTURE_2D, textureIDs[1]); // Bind the texture for the carpet
 
     glPushMatrix();
     glTranslatef(-0.6, -0.7, 2.0);
@@ -410,7 +377,7 @@ void room()
 
     // ceiling
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[4]); // Bind the texture for the ceiling
+    glBindTexture(GL_TEXTURE_2D, textureIDs[3]); // Bind the texture for the ceiling
 
     glPushMatrix();
     glTranslatef(-2, 5.0, 0);
@@ -427,7 +394,7 @@ void room()
 
     // floor
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureIDs[1]); // Bind the texture for the floor
+    glBindTexture(GL_TEXTURE_2D, textureIDs[0]); // Bind the texture for the floor
 
     glPushMatrix();
     glTranslatef(-2, -0.8, 0);
@@ -506,28 +473,27 @@ void computertable()
 }
 
 
-void gamingChair() 
+void gamingChair()
 {
-
     GLUquadric* quad = gluNewQuadric();
 
     // Chair leg bar
-	glColor3f(0.0, 0.0, 0.0);
-	glPushMatrix();
-	glTranslatef(4.0, -0.1, 5.0);
-	glScalef(0.2, 0.2, 0.2);
+    glColor3f(0.0, 0.0, 0.0);
+    glPushMatrix();
+    glTranslatef(chairX, chairY+0.2, chairZ);
+    glScalef(0.2, 0.2, 0.2);
     glRotatef(90, 1, 0, 0);
     gluCylinder(quad, 0.3, 0.3, 3, 100, 100);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(4.0, -0.7, 4.7);
+    glTranslatef(chairX, chairY - 0.4, chairZ - 0.3);
     glScalef(0.2, 0.2, 0.2);
     gluCylinder(quad, 0.3, 0.3, 3, 100, 100);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(3.7, -0.7, 5.0);
+    glTranslatef(chairX - 0.3, chairY - 0.4, chairZ);
     glRotatef(90, 0, 1, 0);
     glScalef(0.2, 0.2, 0.2);
     gluCylinder(quad, 0.3, 0.3, 3, 100, 100);
@@ -535,64 +501,64 @@ void gamingChair()
 
     // wheels
     glPushMatrix();
-    glTranslatef(3.7, -0.8, 5.0);
-    glRotatef(90, 0, 1, 0);
-	glScalef(0.4, 0.3, 0.3);
-	glutSolidTorus(0.1, 0.2, 100, 100);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(4.3, -0.8, 5.0);
+    glTranslatef(chairX - 0.3, chairY - 0.5, chairZ);
     glRotatef(90, 0, 1, 0);
     glScalef(0.4, 0.3, 0.3);
     glutSolidTorus(0.1, 0.2, 100, 100);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(4.0, -0.8, 5.3);
+    glTranslatef(chairX + 0.3, chairY - 0.5, chairZ);
     glRotatef(90, 0, 1, 0);
     glScalef(0.4, 0.3, 0.3);
     glutSolidTorus(0.1, 0.2, 100, 100);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(4.0, -0.8, 4.7);
+    glTranslatef(chairX, chairY - 0.5, chairZ + 0.3);
+    glRotatef(90, 0, 1, 0);
+    glScalef(0.4, 0.3, 0.3);
+    glutSolidTorus(0.1, 0.2, 100, 100);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(chairX, chairY - 0.7, chairZ - 0.3);
     glRotatef(90, 0, 1, 0);
     glScalef(0.4, 0.3, 0.3);
     glutSolidTorus(0.1, 0.2, 100, 100);
     glPopMatrix();
 
     // Seat
-	glColor3f(0.0, 0.0, 0.0);
-	glPushMatrix();
-    glTranslatef(4.0, -0.0, 5.0);
+    glColor3f(0.0, 0.0, 0.0);
+    glPushMatrix();
+    glTranslatef(chairX, chairY+0.2, chairZ);
     glRotatef(90, 1, 0, 0);
     glScalef(1.0, 1.2, 1.0);
     glutSolidTorus(0.1, 0.3, 100, 100);
     glTranslatef(0.0, 0.0, 0.0);
-	gluDisk(quad, 0.0, 0.2, 100, 100);
+    gluDisk(quad, 0.0, 0.2, 100, 100);
     glPopMatrix();
 
-	// back rest
-	glPushMatrix();
-    glTranslatef(4.0, 0.6, 5.5);
+    // back rest
+    glPushMatrix();
+    glTranslatef(chairX, chairY + 0.9, chairZ + 0.5);
     glScalef(0.2, 0.2, 0.2);
     glRotatef(90, 1, 0, 0);
-	glRotatef(15, 1, 0, 0);
+    glRotatef(15, 1, 0, 0);
     gluCylinder(quad, 0.2, 0.3, 3, 100, 100);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(4.0, 1.0, 5.52);
+    glTranslatef(chairX, chairY + 1.3, chairZ + 0.52);
     glScalef(1.0, 1.5, 1.0);
     glRotatef(5, 1, 0, 0);
-    //glRotatef(90, 0, 0, 0);
     glutSolidTorus(0.1, 0.3, 100, 100);
     gluDisk(quad, 0.0, 0.2, 100, 100);
     glPopMatrix();
 
     gluDeleteQuadric(quad);
 }
+
 
 void gamingPC() {
 	// machine body
@@ -684,21 +650,102 @@ void gamingPC() {
     drawCube();
     glPopMatrix();
 
+    // Textures ****************************************************
+
     // mouse pad
-    glColor3f(0.545, 0.271, 0.075);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[8]); // Bind the texture for the mouse pad
     glPushMatrix();
     glTranslatef(3.00, 0.75, 2.7);
-    glScalef(0.7, 0.01, 0.2);
-    drawCube();
+    glScalef(2.1, 0.01, 0.6);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
     glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
 
     // keyboard
-    glColor3f(0.0, 0.0, 0.0);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[9]); // Bind the texture for the keyboard
     glPushMatrix();
     glTranslatef(3.20, 0.8, 2.8);
-    glScalef(0.3, 0.01, 0.1);
-    drawCube();
+    glScalef(0.9, 0.01, 0.3);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 0.0f, 1.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
     glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+
+    // monitor 1 screen
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[4]); // Bind the texture for the first screen
+    glPushMatrix();
+    glTranslatef(3.5, 1.0, 2.55);
+    glRotatef(2, 1, 0, 0);
+    glScalef(1.2, 0.9, 0.01);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+
+    // monitor 2 screen
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[5]); // Bind the texture for the second screen
+    glPushMatrix();
+    glTranslatef(2.25, 1.0, 2.6);
+    glRotatef(2, 1, 0, 0);
+    glRotatef(10, 0, 1, 0);
+    glScalef(1.2, 0.9, 0.01);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+
+    // monitor 3 screen 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[6]); // Bind the texture for the third screen
+    glPushMatrix();
+    glTranslatef(4.75, 1.0, 2.5);
+    glRotatef(2, 1, 0, 0);
+    glRotatef(-10, 0, 1, 0);
+    glScalef(1.2, 0.9, 0.01);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+
+    // machine body
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureIDs[7]); // Bind the texture for the machine body
+    glPushMatrix();
+    glTranslatef(6.1, 0.62, 3.11);
+    glScalef(0.45, 1.2, 0.9);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 0.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 1.0f, 0.0f);
+    glEnd();
+    glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
 }
 
 void bed()
@@ -1396,30 +1443,48 @@ void reshape(GLsizei w, GLsizei h) {
 // Update the keyboardSpecial function to include boundary checks
 void keyboardSpecial(int key, int x, int y) {
     if (key == GLUT_KEY_UP)
-        camZ -= 1; // Move forward
+        camZ -= 1.0f; // Move forward
 
     if (key == GLUT_KEY_DOWN)
-        camZ += 1; // Move backward
+        camZ += 1.0f; // Move backward
 
     if (key == GLUT_KEY_RIGHT)
-        camX += 1; // Move right
+        camX += 1.0f; // Move right
 
     if (key == GLUT_KEY_LEFT)
-        camX -= 1; // Move left
+        camX -= 1.0f; // Move left
+
+    // Move chair
+    if (key == GLUT_KEY_UP)
+        chairZ -= 0.1f; // Move chair forward
+
+    if (key == GLUT_KEY_DOWN)
+        chairZ += 0.1f; // Move chair backward
+
+    if (key == GLUT_KEY_RIGHT)
+        chairX += 0.1f; // Move chair right
+
+    if (key == GLUT_KEY_LEFT)
+        chairX -= 0.1f; // Move chair left
 
     // Prevent camera from moving outside the room
     camX = std::max(-14.0f, std::min(camX, 14.0f));
     camY = std::max(-0.3f, std::min(camY, 5.0f)); // Assuming floor at -0.3 and ceiling at 5.0
     camZ = std::max(-14.0f, std::min(camZ, 14.0f));
 
+    // Prevent chair from moving outside the room
+    chairX = std::max(-14.0f, std::min(chairX, 14.0f));
+    chairY = std::max(-0.3f, std::min(chairY, 5.0f));
+    chairZ = std::max(-14.0f, std::min(chairZ, 14.0f));
+
     glutPostRedisplay();
 }
 
 
-void myKeyboardFunc(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
+
+
+void myKeyboardFunc(unsigned char key, int x, int y) {
+    switch (key) {
     case 'w': // move eye point upwards along Y axis
         eyeY += 1.0;
         break;
@@ -1433,16 +1498,28 @@ void myKeyboardFunc(unsigned char key, int x, int y)
         eyeX += 1.0;
         break;
     case 'o':  //zoom out
-        eyeZ += 1;
+        eyeZ += 1.0;
         break;
-    case 'i': //zoom in
-        eyeZ -= 1;
+    case 'p':  //zoom in
+        eyeZ -= 1.0;
+        break;
+    case 'i': // move chair forward
+        chairZ -= 0.1f;
+        break;
+    case 'k': // move chair backward
+        chairZ += 0.1f;
+        break;
+    case 'j': // move chair left
+        chairX -= 0.1f;
+        break;
+    case 'l': // move chair right
+        chairX += 0.1f;
         break;
     case 'q': //back to default eye point and ref point
         eyeX = 7.0; eyeY = 2.0; eyeZ = 15.0;
         refX = 0.0; refY = 0.0; refZ = 0.0;
         break;
-    case 'j': // move ref point upwards along Y axis
+    case 'z': // move ref point upwards along Y axis
         refY += 1.0;
         break;
     case 'n': // move ref point downwards along Y axis
@@ -1454,170 +1531,131 @@ void myKeyboardFunc(unsigned char key, int x, int y)
     case 'm': // move eye point right along X axis
         refX += 1.0;
         break;
-    case 'k':  //move ref point away from screen/ along z axis
-        refZ += 1;
-        break;
-    case 'l': //move ref point towards screen/ along z axis
-        refZ -= 1;
-        break;
+
     case 'f': //turn on/off fan
-        if (fanSwitch == false) {
-            fanSwitch = true; break;
-        }
-        else {
-            fanSwitch = false; break;
-        }
+        fanSwitch = !fanSwitch;
+        break;
     case '1': //to turn on and off light one
-        if (switchOne == false)
-        {
-            switchOne = true; amb1 = false; diff1 = true; spec1 = true;
-            glEnable(GL_LIGHT0); break;
-        }
-        else if (switchOne == true)
-        {
-            switchOne = false; amb1 = false; diff1 = false; spec1 = false; glDisable(GL_LIGHT0); break;
-        }
+        switchOne = !switchOne;
+        if (switchOne) glEnable(GL_LIGHT0); else glDisable(GL_LIGHT0);
+        break;
     case '2': //to turn on and off light two
-        if (switchTwo == false)
-        {
-            switchTwo = true; amb2 = false; diff2 = true; spec2 = true;
-            glEnable(GL_LIGHT1); break;
-        }
-        else if (switchTwo == true)
-        {
-            switchTwo = false; amb2 = false; diff2 = false; spec2 = false;
-            glDisable(GL_LIGHT1); break;
-        }
-    case '3': //to turn on and off light one
-        if (switchLamp == false)
-        {
-            switchLamp = true; amb3 = true; diff3 = true; spec3 = true;
-            glEnable(GL_LIGHT2); break;
-        }
-        else if (switchLamp == true)
-        {
-            switchLamp = false; amb3 = false; diff3 = false; spec3 = false;
-            glDisable(GL_LIGHT2); break;
-        }
-    case'4': //turn on/off ambient light 1
-        if (amb1 == false) { amb1 = true; break; }
-        else { amb1 = false; break; }
-    case'5':
-        if (diff1 == false) { diff1 = true; break; }
-        else { diff1 = false; break; }
-    case'6':
-        if (spec1 == false) { spec1 = true; break; }
-        else { spec1 = false; break; }
-    case'7': //turn on/off ambient light 2
-        if (amb2 == false) { amb2 = true; break; }
-        else { amb2 = false; break; }
-    case'8':
-        if (diff2 == false) { diff2 = true; break; }
-        else { diff2 = false; break; }
-    case'9':
-        if (spec2 == false) { spec2 = true; break; }
-        else { spec2 = false; break; }
-    case'e': //turn on/off ambient lamp light
-        if (amb3 == false) { amb3 = true; break; }
-        else { amb3 = false; break; }
-    case'r':
-        if (diff3 == false) { diff3 = true; break; }
-        else { diff3 = false; break; }
-    case't':
-        if (spec3 == false) { spec3 = true; break; }
-        else { spec3 = false; break; }
+        switchTwo = !switchTwo;
+        if (switchTwo) glEnable(GL_LIGHT1); else glDisable(GL_LIGHT1);
+        break;
+    case '3': //to turn on and off lamp
+        switchLamp = !switchLamp;
+        if (switchLamp) glEnable(GL_LIGHT2); else glDisable(GL_LIGHT2);
+        break;
+    case '4': //turn on/off ambient light 1
+        amb1 = !amb1;
+        break;
+    case '5':
+        diff1 = !diff1;
+        break;
+    case '6':
+        spec1 = !spec1;
+        break;
+    case '7': //turn on/off ambient light 2
+        amb2 = !amb2;
+        break;
+    case '8':
+        diff2 = !diff2;
+        break;
+    case '9':
+        spec2 = !spec2;
+        break;
+    case 'e': //turn on/off ambient lamp light
+        amb3 = !amb3;
+        break;
+    case 'r':
+        diff3 = !diff3;
+        break;
+    case 't':
+        spec3 = !spec3;
+        break;
     case 27:    // Escape key
         exit(1);
     }
 
+    // Prevent chair from moving outside the room
+    chairX = std::max(-14.0f, std::min(chairX, 14.0f));
+    chairY = std::max(-0.3f, std::min(chairY, 5.0f));
+    chairZ = std::max(-14.0f, std::min(chairZ, 14.0f));
+
     glutPostRedisplay();
 }
 
-void animate()
-{
-    if (redFlag)
-    {
-        theta += 2;
+
+void animate() {
+    if (redFlag) {
+        theta += 2.0;
         z -= 0.02; //0.016667;
-        if (theta >= 196 && theta <= 210)
-        {
+        if (theta >= 196.0 && theta <= 210.0) {
             y = 1.44;
         }
-        else if (theta >= 180 && theta <= 194)
-        {
+        else if (theta >= 180.0 && theta <= 194.0) {
             y = 1.42;
         }
-        else if (theta >= 180 && theta <= 194)
-        {
+        else if (theta >= 180.0 && theta <= 194.0) {
             y = 1.4;
         }
-        else if (theta >= 164 && theta <= 178)
-        {
+        else if (theta >= 164.0 && theta <= 178.0) {
             y = 1.42;
         }
 
-        if (theta == 210)
-        {
+        if (theta == 210.0) {
             redFlag = false;
         }
     }
-    else
-    {
-        theta -= 2;
-        z += 0.02;//0.016667;
+    else {
+        theta -= 2.0;
+        z += 0.02; //0.016667;
 
-        if (theta >= 196 && theta <= 210)
-        {
+        if (theta >= 196.0 && theta <= 210.0) {
             y = 1.44;
         }
-        else if (theta >= 180 && theta <= 194)
-        {
+        else if (theta >= 180.0 && theta <= 194.0) {
             y = 1.42;
         }
-        else if (theta >= 180 && theta <= 194)
-        {
+        else if (theta >= 180.0 && theta <= 194.0) {
             y = 1.4;
         }
-        else if (theta >= 164 && theta <= 178)
-        {
+        else if (theta >= 164.0 && theta <= 178.0) {
             y = 1.42;
         }
 
-        if (theta == 150)
-        {
+        if (theta == 150.0) {
             redFlag = true;
         }
     }
 
     if (fanSwitch) {
-        a += 5;
-        if (a > 360)
-            a -= 360;
-    }
-    else {
-        a = a;
+        a += 5.0;
+        if (a > 360.0)
+            a -= 360.0;
     }
 
     glutPostRedisplay();
-
 }
 
-void fullScreen(int w, int h)
-{
-    //Prevent a divide by zero, when window is too short;you cant make a window of zero width.
+
+void fullScreen(int w, int h) {
+    // Prevent a divide by zero, when window is too short; you can't make a window of zero width.
     if (h == 0)
         h = 1;
-    float ratio = (GLfloat)w / (GLfloat)h;         //Calculate aspect ratio of the window
+    float ratio = static_cast<GLfloat>(w) / static_cast<GLfloat>(h); // Calculate aspect ratio of the window
 
-    //Set the perspective coordinate system
-    glMatrixMode(GL_PROJECTION);                   //Use the Projection Matrix
-    glLoadIdentity();                              //Reset Matrix
+    // Set the perspective coordinate system
+    glMatrixMode(GL_PROJECTION); // Use the Projection Matrix
+    glLoadIdentity(); // Reset Matrix
 
-    glViewport(0, 0, w, h);                        //Set the viewport to be the entire window
-    gluPerspective(60, ratio, 1, 500);             //Set the correct perspective.
+    glViewport(0, 0, w, h); // Set the viewport to be the entire window
+    gluPerspective(60.0, ratio, 1.0, 500.0); // Set the correct perspective.
     //glFrustum(-2.5,2.5,-2.5,2.5, ratio, 200);
-    glMatrixMode(GL_MODELVIEW);                    //Get Back to the Modelview
+    glMatrixMode(GL_MODELVIEW); // Get Back to the Modelview
 }
+
 
 
 int main(int argc, char** argv)
